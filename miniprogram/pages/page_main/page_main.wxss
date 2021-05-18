@@ -1,0 +1,77 @@
+@import "/icons/lib.wxss";
+@import "/styles/addEvent.wxss";
+@import "/styles/view_list.wxss";
+@import "/styles/view_today.wxss";
+
+
+.viewMain{
+    height: 90%;
+    top: 0%;
+    overflow: scroll;
+}
+.naviMain{
+    display: flex;
+    height: 10%;
+    bottom: 0%;
+    box-sizing: border-box;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: #ECECEC;
+}
+.naviMainBtn{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.naviMainIcon{
+    justify-content: center;
+    flex-grow: 2;
+    align-self: center;
+    background-repeat: no-repeat;  
+    background-size: 28%;     
+    background-position: center;
+    height: 100%;
+    width: 100%;
+}
+.naviMainText_off{
+    flex-grow: 1;
+    font-size: 75%;
+    color: black;
+}
+.naviMainText_on{
+    flex-grow: 1;
+    font-size: 75%;
+    color: #4169E1;
+}
+.naviSub{
+    display: flex;
+    order: -10;
+    height: 5%;
+    top: 0%;
+    box-sizing: border-box;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #ECECEC;
+}
+.naviSubBtn{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.naviSubText_off{
+    word-break: keep-all;
+    font-size: 75%;
+    color: black;
+}
+.naviSubText_on{
+    word-break: keep-all;
+    font-size: 75%;
+    color: #4169E1;
+}
+.btnPress{
+    background-color: #D2D2D2 !important;
+}
+page{
+    width:100%;
+    height:100%;
+}

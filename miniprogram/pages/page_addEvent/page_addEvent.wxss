@@ -1,0 +1,129 @@
+.titleUnit{
+    display: flex;
+    order: -10;
+    height: 8%;
+    justify-content: center;
+    box-sizing: border-box;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #ECECEC;
+}
+.titleText{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size:120%;
+    text-align: center;
+    font-weight: bold;
+    height: 100%;
+    width: 50%;
+}
+.items{
+    order:1;
+    bottom:0%;
+    height: 90%;
+    overflow: scroll; 
+}
+.itemUnit{
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    height: 10%;
+    width: 100%;
+    /* box-sizing: border-box;
+    border-width: 1px;
+    border-color: black;
+    border-style: solid;  */
+} 
+.unitText{
+    word-break: keep-all;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    order:-1;
+    width: 25%;
+    text-align: center;
+    justify-content: center;
+    background-color: white;
+    font-weight: bold;
+    box-sizing: border-box;
+    border-right-style: solid;
+    border-right-color: #ECECEC;
+    border-right-width: 1px;
+}
+.unitBody{
+    word-break: keep-all;
+    height: 90%;
+    display: flex;
+    align-items: center;
+    order:1;
+    width: 80%;
+    font-size: 90%;
+    justify-content: space-around;
+    background-color: white;
+    /* box-sizing: border-box;
+    border-width: 1px;
+    border-color: black;
+    border-style: solid; */
+}
+.finishUnit{
+    display: flex;
+    align-items: center;
+    height: 10%;
+    order: 100;
+    box-sizing: border-box;
+    border-top-width: 2px;
+    border-top-color: #ECECEC;
+    border-top-style: solid;
+}
+.finishBtn{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 40% !important;
+}
+.hoverBtnPosi{
+    background-color: #4169E1 !important;
+}
+.hoverBtnNega{
+    background-color: #B40014 !important;
+}
+input{
+    border-width: 2px;
+    border-color: #ECECEC;
+    border-style: solid;
+}
+textarea{
+    height: 90%;
+    width: 90%;
+    border-width: 2px;
+    border-color: #ECECEC;
+    border-style: solid;
+}
+radio{
+    transform:scale(0.8);
+}
+checkbox .wx-checkbox-input {
+    width: 35rpx;
+    height: 35rpx;
+}
+checkbox-group{
+    display: flex;
+    width: 90%;
+    flex-wrap:wrap;
+}
+picker-view {
+    align-items: center;
+    align-content: center;
+    width: 40%;
+    height: 95%;
+}
+.pickerDisplay{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+page{
+    display:inline; 
+}

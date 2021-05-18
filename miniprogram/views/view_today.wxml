@@ -1,0 +1,26 @@
+<view class="addEvent">
+    <button class="addEventBtn" hover-class="btnPress"
+        bindtap="openPage_addEvent">
+        <text class="addEventText"  decode="{{true}}">添加</text>
+        <view class="addEventIcon icon_add"></view>
+    </button>
+</view>
+<view class="todayDisplay">
+    <view class="todayCell" wx:for="{{events[0]}}" >
+        <button id="today_{{index}}" class="todayItem" hover-class="btnPress" bindtap="todayShowDetail">
+            <view class="todayItemText">{{item.abbr==""? item.type: item.abbr}}</view>
+            <view class="todayItemRemind">
+                余：10月12周5天
+            </view>
+        </button>
+        <view class="todayDetail">
+            
+        </view>
+        <view class="todayOpBtns">
+            <button class="todayOpBtn">完成</button>
+            <button class="todayOpBtn">延后</button>
+            <button class="todayOpBtn">终止</button>
+        </view>
+    </view>
+    
+</view>

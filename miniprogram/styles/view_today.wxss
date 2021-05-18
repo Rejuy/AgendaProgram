@@ -1,0 +1,56 @@
+.todayCell{
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    /* height: 15%; */
+    border-bottom-color: #D2D2D2;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+.todayDisplay{
+    width: 100%;
+    height: 90%;
+    overflow: scroll;
+}
+.todayItem{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100% !important;
+    /* height: 80%; */
+    background-color: white;
+    border-radius: 50rpx;
+}
+.todayItemText{
+    display: flex;
+    justify-content: center;
+    /* height: 80%; */
+    width: 50%;
+    align-items: center;
+    font-weight: bold;
+    font-size:80%;
+}
+.todayItemRemind{
+    font-size:70%
+}
+.todayDetail{
+    width: 90%;
+    height: 150rpx;
+    overflow: scroll;
+    box-sizing: border-box;
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+}
+.todayOpBtns{
+    display:flex;
+    width: 100%;
+}
+.todayOpBtn{
+
+    /* height: 100% !important; */
+    font-size:32rpx;
+}

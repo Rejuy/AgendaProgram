@@ -1,0 +1,3 @@
+<!--miniprogram/pages/page_login/page_login.wxml-->
+
+<button bindtap="doLogin">点击登录</button>

@@ -1,0 +1,44 @@
+<view class="listCell">
+    <view class="listCellDisplay">
+        <view class="listItemTitle">
+            甲乙丙丁午己庚辛壬癸一二三四五六七八九十
+        </view>
+        <view class="listItemType">
+            甲乙丙丁午己庚辛壬癸一二三四五六七八九十
+        </view>
+        <view class="listItemDetail">
+            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
+            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
+            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
+        </view>
+        <view class="listItemBtns">
+            <button class="listItemBtn">
+                <view style="color:#4169E1">修改</view>
+            </button>
+            <button class="listItemBtn">
+                <view style="color:#4169E1">删除</view>
+            </button>
+        </view>
+    </view>
+</view>
+<view class="listCell">
+    <view class="listCellDisplay">
+        <view class="listItemTitle">
+            甲乙丙丁午己庚辛壬癸一二三四五六七八九十
+        </view>
+        <view class="listItemType">
+            甲乙丙丁午己庚辛壬癸一二三四五六七八九十
+        </view>
+        <view class="listItemDetail">
+            
+        </view>
+        <view class="listItemBtns">
+            <button class="listItemBtn">
+                <view style="color:#4169E1">修改</view>
+            </button>
+            <button class="listItemBtn">
+                <view style="color:#4169E1">删除</view>
+            </button>
+        </view>
+    </view>
+</view>

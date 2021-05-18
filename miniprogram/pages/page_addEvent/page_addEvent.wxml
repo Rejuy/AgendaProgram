@@ -1,0 +1,158 @@
+<!--miniprogram/pages/page_addEvent/page_addEvent.wxml-->
+<view class="titleUnit">
+    <view class="titleText" style="color:#4169E1">添加待办</view>
+</view>
+<view class="items">
+<form bindsubmit="submitForm">
+    <view class="itemUnit">      
+        <view class="unitText">
+            类别
+        </view>
+        <view class="unitBody">
+            <radio-group name="type">
+                生活 <radio value="生活" color="#4169E1" checked="true">　</radio>
+                学习 <radio value="学习" color="#4169E1" >　</radio>
+                工作 <radio value="工作" color="#4169E1" />
+            </radio-group>
+        </view>
+    </view>
+    <view class="itemUnit" style="height:10%">      
+        <view class="unitText">
+            简介
+        </view>
+        <view class="unitBody">
+            <textarea name="abbr" maxlength="20" placeholder="20字以内，可不填" style="height:85%;width:85%">
+            </textarea>
+        </view>
+    </view>
+
+    
+    <view class="itemUnit">      
+        <view class="unitText">
+            时间类型
+        </view>
+        <view class="unitBody">
+            <radio-group name="mainType" bindchange="selMainType">
+                时间点 <radio value="point" color="#4169E1" checked="true"></radio>
+                时间段 <radio value="period" color="#4169E1" ></radio>
+                周期 <radio value="cycle" color="#4169E1" />
+            </radio-group>
+        </view>
+    </view>
+    
+    <view class="itemUnit" style="height:10%" wx:if="{{mainType=='point' || mainType=='period'}}">      
+        <view class="unitText">
+            <view wx:if="{{mainType == 'point'}}">截止时间</view>
+            <view wx:if="{{mainType == 'period'}}">时长</view>
+        </view>
+        <view class="unitBody" style="flex-direction:column;justify-content:space-around">
+            <view style="display:flex;">
+                <view style="display:flex;align-items:center" wx:if="{{mainType == 'point'}}">
+                    <input style="width:60%" name="year" value="{{mainType=='point'?nowTime[0]:0}}" type="number" maxlength="{{mainType=='point'?4:1}}"/>年
+                </view>
+                <view style="display:flex;align-items:center">
+                    <input style="width:60%" name="month" value="{{mainType=='point'?nowTime[1]:0}}" type="number" maxlength="2"/>月
+                </view>
+                <view style="display:flex;align-items:center" wx:if="{{mainType == 'point'}}">
+                    <input style="width:60%" name="date" value="{{nowTime[2]}}" type="number" maxlength="2"/>日
+                </view>
+                <view style="display:flex;align-items:center" wx:if="{{mainType == 'period'}}">
+                    <input style="width:60%" name="date" value="0" type="number" maxlength="2"/>天
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <view class="itemUnit" wx:if="{{mainType=='cycle'}}">      
+        <view class="unitText">
+            时间限制
+        </view>
+        <view class="unitBody">
+            <radio-group name="cycleType" bindchange="selCycleType">
+                严格 <radio value="tight" color="#4169E1" checked="true">　　</radio>
+                宽松 <radio value="loose" color="#4169E1" ></radio>
+            </radio-group>
+        </view>
+    </view>
+
+    <view class="itemUnit" wx:if="{{mainType=='cycle'&&cycleType=='tight'}}">      
+        <view class="unitText">
+            选择周期
+        </view>
+        <view class="unitBody">
+            <radio-group name="cycleGap" bindchange="selCycleGap">
+                每天 <radio value="day" color="#4169E1" checked="true">　　</radio>
+                每周 <radio value="week" color="#4169E1" ></radio>
+            </radio-group>
+        </view>
+    </view>
+
+    <view class="itemUnit" wx:if="{{mainType=='cycle'&&cycleType=='tight'&&cycleGap=='week'}}">      
+        <view class="unitText">
+            选择星期
+        </view>
+        <view class="unitBody">
+            <checkbox-group name="cycleTightDays">
+                <checkbox color="#4169E1" value="1">一　</checkbox>
+                <checkbox color="#4169E1" value="2">二　</checkbox>
+                <checkbox color="#4169E1" value="3">三　</checkbox>
+                <checkbox color="#4169E1" value="4">四　</checkbox>
+                <checkbox color="#4169E1" value="5">五　</checkbox>
+                <checkbox color="#4169E1" value="6">六　</checkbox>
+                <checkbox color="#4169E1" value="0">日　</checkbox>
+            </checkbox-group>
+        </view>
+    </view>
+
+    <view class="itemUnit" wx:if="{{mainType=='cycle'&&cycleType=='loose'}}">      
+        <view class="unitText">
+            选择周期
+        </view>
+        <view class="unitBody">
+            <radio-group name="cycleGapUnit" bindchange="selCycleGapUnit">
+                每周 <radio value="week" color="#4169E1" checked="true">　　</radio>
+                每月 <radio value="month" color="#4169E1" ></radio>
+            </radio-group>
+        </view>
+    </view>
+
+    <view class="itemUnit" wx:if="{{mainType=='cycle'&&cycleType=='loose'}}">      
+        <view class="unitText">
+            天数
+        </view>
+        <view class="unitBody">
+            <picker-view wx:if="{{cycleGapUnit=='week'}}" indicator-style="height: 80%;" bindchange="selCycleGapEach">
+                <picker-view-column >
+                    <view wx:for="{{daysInWeek}}" class="pickerDisplay">每周　{{item}}　天</view>
+                </picker-view-column>
+            </picker-view>
+
+            <picker-view wx:if="{{cycleGapUnit=='month'}}" indicator-style="height: 80%;" bindchange="selCycleGapEach">
+                <picker-view-column>
+                    <view wx:for="{{daysInMonth}}" class="pickerDisplay">每月　{{item}}　天</view>
+                </picker-view-column>
+            </picker-view>
+        </view>
+    </view>
+
+    <view class="itemUnit" style="height:20%">      
+        <view class="unitText">
+            具体内容
+        </view>
+        <view class="unitBody">
+            <textarea name="content" maxlength="200" placeholder="200字以内，可不填">
+            </textarea>
+        </view>
+    </view>
+
+    <view class="finishUnit">      
+        <button form-type="submit" class="finishBtn" style="background-color:#557DF5" hover-class="hoverBtnPosi">
+            <view style="color:white">添加</view>
+        </button>
+        <button class="finishBtn" style="background-color:#E61E46" hover-class="hoverBtnNega" bindtap="toMainPage">
+            <view style="color:white">取消</view>
+        </button>
+    </view>
+
+</form>
+</view>

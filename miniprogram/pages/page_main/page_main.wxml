@@ -1,0 +1,20 @@
+
+<view class="viewMain">
+    <include wx:if="{{viewNo==0}}" src="/views/view_today.wxml" />
+    <include wx:if="{{viewNo==1}}" src="/views/view_list.wxml" />
+    <include wx:if="{{viewNo==2}}" src="/views/view_user.wxml" />
+</view>
+
+<view class="naviMain">
+    <button class="naviMainBtn" id="naviMainBtn_{{i}}"
+        wx:for="{{naviMain.icon}}"
+        wx:for-index="i"
+        bindtap="tapNaviBtn">
+
+        <view class="naviMainIcon icon_{{naviMain.icon[i]}}_{{naviMain.state[i]}}">
+        </view>
+        <view class="naviMainText_{{naviMain.state[i]}}">
+            {{naviMain.text[i]}}
+        </view>
+    </button>
+</view>
