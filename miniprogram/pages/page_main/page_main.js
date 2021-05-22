@@ -1,5 +1,4 @@
-// miniprogram/pages/page_main/page_main.js
-const util_event=require("../../utils/event.js");
+const util_eventFlush = require("../../utils/eventFlush.js");
 Page({
 
     data: {
@@ -19,7 +18,7 @@ Page({
         },{
             "viewName":"user"}
         ],
-        events:[],
+        events:[[],[],[]],
         todayReminds:[],
         todayIfShow:[]
     },
@@ -49,12 +48,12 @@ Page({
         }
     },
     doDetail:function(e){
-        //TO DO
+        
     },
     doFinish:function(e){
-        //TO DO
+        
     },
-    doDelay:function(condition, index){     //TO DO
+    doDelay:function(condition, index){
         const thisPage = this;
         const app = getApp();
         const db = wx.cloud.database();
@@ -134,44 +133,19 @@ Page({
             }
         })
         const time = new Date();
-        app.globalData.thisDate = [time.getFullYear(),time.getMonth()+1,time.getDate(),time.getDay()];
-
-        const db = wx.cloud.database();
-        for(var i = 0; i < 3; i++){
-            db.collection('Events').where({
-                _openid: app.globalData.openId,
-                condition: i
-            }).get({
-                success:function(res){
-                    var temp = res.data;
-                    var len = temp.length;
-                    if(len != 0){
-                        var index = temp[0].condition;
-                        if(index == 0){
-                            var tShow = [];
-                            for(var j = 0; j < len; j++){tShow.push(false);}
-                            thisPage.setData({todayIfShow:tShow});
-                        }
-                        // console.log(index + " : "+ temp);
-                        const thisDate = app.globalData.thisDate;
-                        for(var j = 0; j < len; j++){
-                            temp[j].weight = util_event.getWeight(temp[j],thisDate);
-                        }
-                        function cmp(e1, e2){
-                            return e2.weight - e1.weight;
-                        }
-                        temp.sort(cmp);
-                        // for(var j = 0; j < len; j++){
-                        //     console.log(temp[j].weight);
-                        // }
-                        app.globalData.events[index] = temp;
-                        // console.log("AAA");
-                        thisPage.setData({["events["+index+"]"]:temp});
-                        // console.log("mainPage:"+thisPage.data.events[index]);
-                    }
-                }
-            });
+        app.globalData.thisDate = {
+            year: time.getFullYear(),
+            month: time.getMonth()+1,
+            date: time.getDate(),
+            hour: time.getHours(),
+            minute: time.getMinutes(),
+            second: time.getSeconds(),
+            day: time.getDay()
         }
-    },
+        //console.log("ccc");
+        util_eventFlush.openAppFlush(app.globalData.thisDate, thisPage);
+        //console.log("bbb");
+        //console.log(thisPage.data.events[0]);
+    }
 
 })
