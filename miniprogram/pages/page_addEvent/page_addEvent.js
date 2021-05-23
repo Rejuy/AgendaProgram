@@ -55,16 +55,9 @@ Page({
         db.collection('Events').add({
             data:addData,
             success:function(res){   
-                var temp = app.globalData.events[0];
-                // console.log("temp: "+temp);
-                var len = temp.length;
-                // console.log("addData: "+addData);
-                addData.weight = util_event.getWeight(addData, app.globalData.thisDate);
-                // console.log("aa")
-                var i = 0;
-                while(i < len && addData.weight < temp[i].weight){i++;}
-                temp.splice(i, 0, addData);
-                app.globalData.allEvents = temp;
+                let pages = getCurrentPages();    
+                let prevPage = pages[pages.length-2];
+                util_eventFlush.addFlush(addData, prevPage);
                 wx.showModal({
                     title: '添加成功',
                     showCancel:false,
