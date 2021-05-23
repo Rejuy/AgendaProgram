@@ -20,7 +20,8 @@ Page({
         ],
         events:[[],[],[]],
         todayReminds:[],
-        todayIfShow:[]
+        todayIfShow:[],
+        userStat:{}
     },
     tapNaviBtn: function(e){
         var id = e.currentTarget.id;
