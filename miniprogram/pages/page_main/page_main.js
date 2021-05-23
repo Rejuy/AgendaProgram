@@ -143,10 +143,7 @@ Page({
             second: time.getSeconds(),
             day: time.getDay()
         }
-        //console.log("ccc");
-        util_eventFlush.openAppFlush(app.globalData.thisDate, thisPage);
-        //console.log("bbb");
-        //console.log(thisPage.data.events[0]);
+        util_eventFlush.openAppFlush(thisPage);
     }
 
 })
