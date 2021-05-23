@@ -1,5 +1,6 @@
 const util_event = require("../../utils/event.js");
 const util_date = require("../../utils/date.js");
+const util_eventFlush = require("../../utils/eventFlush.js");
 Page({
 
     data: {
