@@ -9,7 +9,11 @@ function addFlush(e, thisDate, mainPage){
         if(app.globalData.events[0][i] <= e.weight) break;
     }
     app.globalData.events[0].splice(i, 0, e);
-    mainPage.setData({["events[0]"]:app.globalData.events[0]});
+    app.globalData.userStat = getUserStat(app.globalData.events);
+    mainPage.setData({
+        ["events[0]"]:app.globalData.events[0],
+        userStat:app.globalData.userStat
+    });
     mainPage.onShow();
 }
 module.exports.addFlush = addFlush;
@@ -17,7 +21,11 @@ module.exports.addFlush = addFlush;
 function deleteFlush(condition, index, mainPage){
     const app = getApp();
     app.globalData.events[condition].splice(index, 1);
-    mainPage.setData({["events["+condition+"]"]:app.globalData.events[condition]});
+    app.globalData.userStat = getUserStat(app.globalData.events);
+    mainPage.setData({
+        ["events["+condition+"]"]:app.globalData.events[condition],
+        userStat:app.globalData.userStat
+    });
     mainPage.onShow();
 }
 module.exports.deleteFlush = deleteFlush;
@@ -33,7 +41,11 @@ function updateFlush(preCondi, preInd, nowEvent, mainPage){
         if(app.globalData.events[nowInd][i] <= nowEvent.weight) break;
     }
     app.globalData.events[nowInd].splice(i, 0, nowEvent);
-    mainPage.setData({["events["+nowInd+"]"]:app.globalData.events[nowInd]});
+    app.globalData.userStat = getUserStat(app.globalData.events);
+    mainPage.setData({
+        ["events["+nowInd+"]"]:app.globalData.events[nowInd],
+        userStat:app.globalData.userStat
+    });
     mainPage.onShow();
 }
 module.exports.updateFlush = updateFlush;
@@ -44,9 +56,11 @@ function finishFlush(ind, mainPage){
     e.condition = 1;
     app.globalData.events[1].push(e);
     app.globalData.events[0].splice(ind, 1);
+    app.globalData.userStat = getUserStat(app.globalData.events);
     mainPage.setData({
         ["events[0]"] : app.globalData.events[0],
-        ["events[1]"]: app.globalData.events[1]
+        ["events[1]"]: app.globalData.events[1],
+        userStat:app.globalData.userStat
     });
     mainPage.onShow();
 }
@@ -94,7 +108,12 @@ function openAppFlush(thisDate, mainPage){
             }
             function cmp(e1, e2){return e2.weight - e1.weight;}
             app.globalData.events[0].sort(cmp);
-            mainPage.setData({events: app.globalData.events});
+            app.globalData.userStat = getUserStat(app.globalData.events);
+            console.log("xx")
+            mainPage.setData({
+                events: app.globalData.events,
+                userStat:app.globalData.userStat
+            });
             for(var i = 0; i < temp.length; i++){
                 var ename = (temp[i].abbr == "")? temp[i].type: temp[i].abbr;
                 wx.showModal({
@@ -116,3 +135,28 @@ function openAppFlush(thisDate, mainPage){
     });
 }
 module.exports.openAppFlush = openAppFlush;
+
+function getUserStat(events){
+    var procCnt = events[0].length;
+    var finiCnt = events[1].length;
+    var unfiCnt = events[2].length;
+    var total = procCnt + finiCnt + unfiCnt;
+    var life = 0, study = 0, work = 0;
+    for(var i = 0; i < 3; i++){
+        for(var j = 0; j < events[i].length; j++){
+            if(events[i][j].type == "生活"){life++;}
+            else if(events[i][j].type == "学习"){study++;}
+            else{work++;}
+        }
+    }
+    var stat = {
+        procNum:procCnt,
+        finiNum:finiCnt,
+        unfiNum:unfiCnt,
+        totalNum:total,
+        lifePercent:(life/total*100).toFixed(0),
+        studyPercent:(study/total*100).toFixed(0),
+        workPercent:(work/total*100).toFixed(0)
+    }
+    return stat;
+}
