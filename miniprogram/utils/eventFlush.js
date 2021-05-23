@@ -1,7 +1,8 @@
 const util_event = require("/event.js");
 const util_time = require("/time.js");
 
-function addFlush(e, thisDate, mainPage){
+function addFlush(e, mainPage){
+    var thisDate = getThisDate();
     e.weight = util_event.getWeight(e, thisDate);
     const app = getApp();
     var i = 0;
@@ -14,7 +15,6 @@ function addFlush(e, thisDate, mainPage){
         ["events[0]"]:app.globalData.events[0],
         userStat:app.globalData.userStat
     });
-    mainPage.onShow();
 }
 module.exports.addFlush = addFlush;
 
@@ -26,7 +26,6 @@ function deleteFlush(condition, index, mainPage){
         ["events["+condition+"]"]:app.globalData.events[condition],
         userStat:app.globalData.userStat
     });
-    mainPage.onShow();
 }
 module.exports.deleteFlush = deleteFlush;
 
@@ -46,7 +45,6 @@ function updateFlush(preCondi, preInd, nowEvent, mainPage){
         ["events["+nowInd+"]"]:app.globalData.events[nowInd],
         userStat:app.globalData.userStat
     });
-    mainPage.onShow();
 }
 module.exports.updateFlush = updateFlush;
 
@@ -62,11 +60,11 @@ function finishFlush(ind, mainPage){
         ["events[1]"]: app.globalData.events[1],
         userStat:app.globalData.userStat
     });
-    mainPage.onShow();
 }
 module.exports.finishFlush = finishFlush;
 
-function openAppFlush(thisDate, mainPage){
+function openAppFlush(mainPage){
+    var thisDate = getThisDate();
     const app = getApp();
     const db = wx.cloud.database();
     app.globalData.events = [[],[],[]];
@@ -109,7 +107,6 @@ function openAppFlush(thisDate, mainPage){
             function cmp(e1, e2){return e2.weight - e1.weight;}
             app.globalData.events[0].sort(cmp);
             app.globalData.userStat = getUserStat(app.globalData.events);
-            console.log("xx")
             mainPage.setData({
                 events: app.globalData.events,
                 userStat:app.globalData.userStat
@@ -135,6 +132,20 @@ function openAppFlush(thisDate, mainPage){
     });
 }
 module.exports.openAppFlush = openAppFlush;
+
+function getThisDate(){
+    const time = new Date();
+    var ret = {
+        year: time.getFullYear(),
+        month: time.getMonth()+1,
+        date: time.getDate(),
+        hour: time.getHours(),
+        minute: time.getMinutes(),
+        second: time.getSeconds(),
+        day: time.getDay()
+    };
+    return ret;
+}
 
 function getUserStat(events){
     var procCnt = events[0].length;
