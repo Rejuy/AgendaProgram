@@ -63,6 +63,21 @@ function finishFlush(ind, mainPage){
 }
 module.exports.finishFlush = finishFlush;
 
+function giveupFlush(ind, mainPage){
+    const app = getApp();
+    var e = app.globalData.events[0][ind];
+    e.condition = 2;
+    app.globalData.events[2].push(e);
+    app.globalData.events[0].splice(ind, 1);
+    app.globalData.userStat = getUserStat(app.globalData.events);
+    mainPage.setData({
+        ["events[0]"] : app.globalData.events[0],
+        ["events[2]"]: app.globalData.events[2],
+        userStat:app.globalData.userStat
+    });
+}
+module.exports.giveupFlush = giveupFlush;
+
 function openAppFlush(mainPage){
     var thisDate = getThisDate();
     const app = getApp();
