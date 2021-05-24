@@ -1,5 +1,6 @@
 // miniprogram/pages/page_main/page_main.js
 const util_event=require("../../utils/event.js");
+const util_date = require("../../utils/date.js");
 Page({
 
     data: {
@@ -20,10 +21,14 @@ Page({
             "viewName":"user"}
         ],
         events:[],
+        displayEvents:[],
         todayReminds:[],
-        todayIfShow:[]
+        todayIfShow:[],
+        ifShowRefineDDL:[]
     },
     tapNaviBtn: function(e){
+        var app = getApp();
+        console.log(app.globalData);
         var id = e.currentTarget.id;
         var to = id.charAt(id.length-1);
         var from = this.data.viewNo;
@@ -48,34 +53,131 @@ Page({
             })
         }
     },
-    doDetail:function(e){
-        //TO DO
-    },
-    doFinish:function(e){
-        //TO DO
-    },
-    doDelay:function(condition, index){     //TO DO
-        const thisPage = this;
-        const app = getApp();
+
+    doFinish:function(e){   //完成
+        var id=e.target.id;
+        var index=id.charAt(id.length-1);
         const db = wx.cloud.database();
-        db.collection('Events').doc(thisPage.events[condition]._id).update({
-            success:function(){
-                if(thisPage.events[condition].mainType=="period"){
-
+        var curMainType=this.data.displayEvents[index].mainType;
+        var curCycleType=this.data.displayEvents[index].curCycleType;
+        //获取当前点击日期
+        var time = new Date();
+        var curTime={year:time.getFullYear(),month:time.getMonth()+1,date:time.getDate()};
+        if(curMainType=="point"){
+            db.collection('Events').doc(this.data.displayEvents[index]._id).update({
+                data:{
+                    condition:1
                 }
-                else{
-
-                }
-            },
-            fail:function(){
-                wx.showModal({
-                    title: '操作失败',
-                    content:'请稍后重试，或检查网络连接',
-                    showCancel:false,
-                    confirmColor: "#4169E1"
-                })  
+            });
+        }
+        else if(curMainType=="period"||(curMainType=="cycle"&&curCycleType=="loose")){
+            var curRemainDays=this.data.displayEvents[index].remainDays;
+            if(curRemainDays>1){
+                db.collection('Events').doc(this.data.displayEvents[index]._id).update({
+                    data:{
+                        remainDays:curRemainDays-1,   //剩余时间-1
+                        lastClickTime:curTime,   //记录上次点击时间
+                        condition:(curMainType=="period"&&curRemainDays==1)?1:0
+                    }
+                });
             }
-        });
+        }
+        else{
+            db.collection('Events').doc(this.data.displayEvents[index]._id).update({
+                data:{
+                    lastClickTime:curTime   //记录上次点击时间
+                }
+            });
+        }
+
+
+        //调用更新page数据的函数
+    },
+
+    doGiveUp:function(e){   //完成
+        var id=e.target.id;
+        var index=id.charAt(id.length-1);
+        const db = wx.cloud.database();
+        var curMainType=this.data.displayEvents[index].mainType;
+        //获取当前点击日期
+        var time = new Date();
+        var curTime={year:time.getFullYear(),month:time.getMonth()+1,date:time.getDate()};
+        if(curMainType=="point"){
+            db.collection('Events').doc(this.data.displayEvents[index]._id).update({
+                data:{
+                    condition:2
+                }
+            });
+        }
+        else{
+            db.collection('Events').doc(this.data.displayEvents[index]._id).update({
+                data:{
+                    lastClickTime:curTime   //记录上次点击时间
+                }
+            });
+        }
+
+
+        //调用更新page数据的函数
+    },
+
+    selDelay(e){    //用户选择了delay，那么就在下面弹出“让用户重新输入年月日时分秒”的view
+                    //这里也用一个数组来表示，叫做ifShowRefineDDL
+        var id = e.target.id;
+        console.log(this.data.ifShowRefineDDL);
+        var index=id.charAt(id.length-1);
+        this.setData({["ifShowRefineDDL["+index+"]"]:true});
+    },
+
+    refineFinish(e){    //用户修改完数据，提交或取消
+        console.log(e);
+        var id=e.currentTarget.id;
+        var index=id.charAt(id.length-1);
+        this.setData({["ifShowRefineDDL["+index+"]"]:false});
+        this.setData({["todayIfShow["+index+"]"]:false});
+    },
+    
+    refineDDL:function(e){
+        var newTime=e.detail.value;
+        var id=e.detail.target.id;
+        var index=id.charAt(id.length-1);
+        console.log(e);
+        const db=wx.cloud.database();
+        if(!util_date.judgeTimeLegal(newTime)){
+            wx.showModal({
+                title: '添加失败',
+                content:'您输入的日期或时间不合法，请重新设置',
+                showCancel:false,
+                confirmColor: "#4169E1"
+            })
+        }
+        else{
+            db.collection('Events').doc(this.data.displayEvents[index]._id).update({
+                data:{
+                    year:newTime.year,
+                    month:newTime.month,
+                    date:newTime.date,
+                    hour:newTime.hour,
+                    minute:newTime.minute,
+                    second:newTime.second,
+                    condition:0
+                }
+            });
+        }
+        //调用更新page数据的函数
+    },
+
+    dele(e){
+        const db = wx.cloud.database();
+        var id=e.target.id;
+        var index= id.substring(9,10);
+        var ev= id.substring(10,11);
+        var t=this.data.events[ev][index]._id;
+        db.collection('Events').doc(t)
+        .remove()
+        .then(res=>{
+                console.log(res)
+        })
     },
     doDelete:function(condition, index){
         const thisPage = this;
@@ -103,13 +205,18 @@ Page({
     },
 
     todayShowDetail:function(e){
+        console.log(e);
         var id = e.target.id;
-        console.log(id)
+        console.log(id);
         var index = id.substring(6, id.length);
-        console.log(index)
-        var now = this.data.ifShowDetail[index];
-        if(now == true){this.setData({["ifShowDetail["+index+"]"]:false})}
-        else{this.setData({["ifShowDetail["+index+"]"]:true})}
+        console.log(index);
+        console.log(this.data.ifShowRefineDDL);
+        var now = this.data.todayIfShow[index];
+        if(now == true){
+            this.setData({["todayIfShow["+index+"]"]:false});
+            this.setData({["ifShowRefineDDL["+index+"]"]:false})
+        }
+        else{this.setData({["todayIfShow["+index+"]"]:true})}
     },
     openPage_addEvent: function(){
         // console.log(this.data.events[0])
@@ -120,7 +227,16 @@ Page({
 
     onShow:function(){
         const app = getApp();
+        
         this.setData({events:app.globalData.events});
+        this.setData({["displayEvents"]:app.globalData.events[0]});
+        //console.log(events[0]);
+        //console.log(displayEvents);
+        var curIfShow=[];
+        for(var i=0;i<displayEvents.length;i++)
+            curIfShow.push(false);
+        this.setData({todayIfShow:curIfShow});
+        this.setData({ifShowRefineDDL:curIfShow});
     },
 
     onLoad: function (options) {
@@ -151,6 +267,7 @@ Page({
                             var tShow = [];
                             for(var j = 0; j < len; j++){tShow.push(false);}
                             thisPage.setData({todayIfShow:tShow});
+                            thisPage.setData({ifShowRefineDDL:tShow});
                         }
                         // console.log(index + " : "+ temp);
                         const thisDate = app.globalData.thisDate;
@@ -168,10 +285,12 @@ Page({
                         // console.log("AAA");
                         thisPage.setData({["events["+index+"]"]:temp});
                         // console.log("mainPage:"+thisPage.data.events[index]);
+                        thisPage.setData({["displayEvents"]:temp});
                     }
                 }
             });
         }
+        
     },
 
 })
