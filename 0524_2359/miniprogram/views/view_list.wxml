@@ -1,0 +1,19 @@
+<view class="naviSub">
+    <button class="naviSubBtn" id="naviSubBtn_{{viewNo}}_{{i}}"
+        size="default"
+        wx:for="{{views[viewNo].text}}"
+        wx:for-index="i"
+        bindtap="tapSubNaviBtn">
+       
+        <view class="naviSubText_{{views[viewNo].state[i]}}">
+            {{views[viewNo].text[i]}}
+        </view>
+       
+    </button>
+</view>
+
+<include wx:if="{{subViewNo == 0}}" src="/views/view_list_proc" />
+<include wx:if="{{subViewNo == 1}}" src="/views/view_list_fini" />
+<include wx:if="{{subViewNo == 2}}" src="/views/view_list_unfi" />
+
+

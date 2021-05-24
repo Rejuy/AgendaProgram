@@ -1,0 +1,15 @@
+{
+    "pages": [
+        "pages/page_main/page_main",
+        "pages/page_addEvent/page_addEvent"
+    ],
+    "window": {
+        "backgroundColor": "#F6F6F6",
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#4169E1",
+        "navigationBarTitleText": "易记事",
+        "navigationBarTextStyle": "white"
+    },
+    "sitemapLocation": "sitemap.json",
+    "style": "v2"
+}
