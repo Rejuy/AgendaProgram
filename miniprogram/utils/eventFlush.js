@@ -89,7 +89,9 @@ function openAppFlush(mainPage){
         success:function(res){
             var preData = res.data;
             var len = preData.length;
-            var temp = [];
+            var pastDue = [];
+            //var temp = [];
+            var reset = [];
             for(var i = 0; i < len; i++){
                 if(preData[i].condition != 0){
                     app.globalData.events[preData[i].condition].push(preData[i]);
@@ -97,7 +99,7 @@ function openAppFlush(mainPage){
                 else if(preData[i].mainType == "point"){
                     if(util_time.timeCmp(preData[i], thisDate) < 0){
                         preData[i].condition = 2;
-                        temp.push(preData[i]);
+                        pastDue.push(preData[i]);
                         app.globalData.events[2].push(preData[i]);
                     }
                     else{
@@ -108,15 +110,26 @@ function openAppFlush(mainPage){
                     app.globalData.events[0].push(preData[i]);
                 }   
                 else{
+                    if(preData[i].cycleType == "loose"){
+                        if((preData[i].cycleGapUnit == "month" && thisDate.date == 1) || (preData[i].cycleGapUnit == "week" && thisDate.day == 1)){
+                            preData[i].remainDays = preData[i].cycleGapEach;
+                            reset.push(preData[i]);
+                        }
+                    }
                     app.globalData.events[0].push(preData[i]);
                 }             
             }
             for(var i = 0; i < app.globalData.events[0].length; i++){
                 app.globalData.events[0][i].weight = util_event.getWeight(app.globalData.events[0][i], thisDate);
             }
-            for(var i = 0; i < temp.length; i++){
-                db.collection('Events').doc(temp[i]._id).set({
+            for(var i = 0; i < pastDue.length; i++){
+                db.collection('Events').doc(pastDue[i]._id).set({
                     data:{condition:2}
+                });
+            }
+            for(var i = 0; i < reset.length; i++){
+                db.collection('Events').doc(reset[i]._id).set({
+                    data:{remainDays:reset[i].remainDays}
                 });
             }
             function cmp(e1, e2){return e2.weight - e1.weight;}
@@ -126,8 +139,8 @@ function openAppFlush(mainPage){
                 events: app.globalData.events,
                 userStat:app.globalData.userStat
             });
-            for(var i = 0; i < temp.length; i++){
-                var ename = (temp[i].abbr == "")? temp[i].type: temp[i].abbr;
+            for(var i = 0; i < pastDue.length; i++){
+                var ename = (pastDue[i].abbr == "")? pastDue[i].type: pastDue[i].abbr;
                 wx.showModal({
                     title: '事件过期',
                     content: ename,
