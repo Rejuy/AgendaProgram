@@ -20,3 +20,18 @@ function timeCmp(t1, t2){
     return 0;
 }
 module.exports.timeCmp = timeCmp;
+
+function getThisTime(){
+    const time = new Date();
+    var ret = {
+        year: time.getFullYear(),
+        month: time.getMonth()+1,
+        date: time.getDate(),
+        hour: time.getHours(),
+        minute: time.getMinutes(),
+        second: time.getSeconds(),
+        day: time.getDay()
+    };
+    return ret;
+}
+module.exports.getThisTime = getThisTime;

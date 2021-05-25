@@ -2,7 +2,7 @@ const util_event = require("/event.js");
 const util_time = require("/time.js");
 
 function addFlush(e, mainPage){
-    var thisDate = getThisDate();
+    var thisDate = util_time.getThisTime();
     e.weight = util_event.getWeight(e, thisDate);
     const app = getApp();
     var i = 0;
@@ -11,10 +11,7 @@ function addFlush(e, mainPage){
     }
     app.globalData.events[0].splice(i, 0, e);
     app.globalData.userStat = getUserStat(app.globalData.events);
-    mainPage.setData({
-        ["events[0]"]:app.globalData.events[0],
-        userStat:app.globalData.userStat
-    });
+    mainPage.onShow();
 }
 module.exports.addFlush = addFlush;
 
@@ -22,10 +19,7 @@ function deleteFlush(condition, index, mainPage){
     const app = getApp();
     app.globalData.events[condition].splice(index, 1);
     app.globalData.userStat = getUserStat(app.globalData.events);
-    mainPage.setData({
-        ["events["+condition+"]"]:app.globalData.events[condition],
-        userStat:app.globalData.userStat
-    });
+    mainPage.onShow();
 }
 module.exports.deleteFlush = deleteFlush;
 
@@ -41,10 +35,7 @@ function updateFlush(preCondi, preInd, nowEvent, mainPage){
     }
     app.globalData.events[nowInd].splice(i, 0, nowEvent);
     app.globalData.userStat = getUserStat(app.globalData.events);
-    mainPage.setData({
-        ["events["+nowInd+"]"]:app.globalData.events[nowInd],
-        userStat:app.globalData.userStat
-    });
+    mainPage.onShow();
 }
 module.exports.updateFlush = updateFlush;
 
@@ -55,11 +46,7 @@ function finishFlush(ind, mainPage){
     app.globalData.events[1].push(e);
     app.globalData.events[0].splice(ind, 1);
     app.globalData.userStat = getUserStat(app.globalData.events);
-    mainPage.setData({
-        ["events[0]"] : app.globalData.events[0],
-        ["events[1]"]: app.globalData.events[1],
-        userStat:app.globalData.userStat
-    });
+    mainPage.onShow();
 }
 module.exports.finishFlush = finishFlush;
 
@@ -70,16 +57,12 @@ function giveupFlush(ind, mainPage){
     app.globalData.events[2].push(e);
     app.globalData.events[0].splice(ind, 1);
     app.globalData.userStat = getUserStat(app.globalData.events);
-    mainPage.setData({
-        ["events[0]"] : app.globalData.events[0],
-        ["events[2]"]: app.globalData.events[2],
-        userStat:app.globalData.userStat
-    });
+    mainPage.onShow();
 }
 module.exports.giveupFlush = giveupFlush;
 
 function openAppFlush(mainPage){
-    var thisDate = getThisDate();
+    var thisDate = util_time.getThisTime();
     const app = getApp();
     const db = wx.cloud.database();
     app.globalData.events = [[],[],[]];
@@ -139,6 +122,7 @@ function openAppFlush(mainPage){
                 events: app.globalData.events,
                 userStat:app.globalData.userStat
             });
+            mainPage.onShow();
             for(var i = 0; i < pastDue.length; i++){
                 var ename = (pastDue[i].abbr == "")? pastDue[i].type: pastDue[i].abbr;
                 wx.showModal({
@@ -161,19 +145,6 @@ function openAppFlush(mainPage){
 }
 module.exports.openAppFlush = openAppFlush;
 
-function getThisDate(){
-    const time = new Date();
-    var ret = {
-        year: time.getFullYear(),
-        month: time.getMonth()+1,
-        date: time.getDate(),
-        hour: time.getHours(),
-        minute: time.getMinutes(),
-        second: time.getSeconds(),
-        day: time.getDay()
-    };
-    return ret;
-}
 
 function getUserStat(events){
     var procCnt = events[0].length;

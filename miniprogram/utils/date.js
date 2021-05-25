@@ -39,3 +39,39 @@ function getDateRange(d1,d2){
     }
 }
 module.exports.getDateRange = getDateRange;
+function judgeTimeLegal(data){
+    var time=new Date();
+    if(data.month>12||data.month<1)
+        return false;
+    var dateLimit=[0,31,28,31,30,31,30,31,31,30,31,30,31];
+    if(ifLeap(data.year))
+        dateLimit[2]=29;
+    if(data.date>dateLimit[data.month]||data.date<1)
+        return false;
+    if(data.hour>23||data.hour<0)
+        return false;
+    if(data.year>time.getFullYear())
+        return true;
+    if(data.year==time.getFullYear()){
+        if(data.month>time.getMonth()+1&&data.month<=12)
+            return true;
+        if(data.month==time.getMonth()+1){
+            if(data.date>time.getDate()&&data.date<=dateLimit[time.getMonth()+1])
+                return true;
+            if(data.date==time.getDate()){
+                if(data.hour>time.getHours()&&data.hour<24)
+                    return true;
+                if(data.hour==time.getHours()){
+                    if(data.minute>time.getMinutes()&&data.minute<60)
+                        return true;
+                    if(data.minute==time.getMinutes()){
+                        if(data.second>time.getSeconds()&&data.second<60)
+                            return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+module.exports.judgeTimeLegal = judgeTimeLegal;

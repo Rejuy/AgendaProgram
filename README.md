@@ -1,3 +1,8 @@
+
+## 5.24.23:59-5.25.8:27改动：
+*1.修复添加周期、时间段任务*
+*2.修复tractDisplayEvents函数*
+
 # utils包下新增eventFlush.js文件，做本地数据更新
 -在数据库操作之后调用这个文件下的函数，具体可以看page_addEvent.js的56行和61行
 - 完成：finishFlush(在event[0]数组的下标，主页)
@@ -6,6 +11,9 @@
 - 删除：deleteFlush（事件的condition，下标，主页）
 
 # 云开发 quickstart
+
+# 云开发 slowend
+
 
 这是云开发的快速启动指引，其中演示了如何上手使用云开发的三大基础能力：
 
@@ -17,11 +25,5 @@
 
 - [云开发文档](https://developers.weixin.qq.com/miniprogram/dev/wxcloud/basis/getting-started.html)
 
-## test git rjy
 
-## test download rjy (change online)
-
-## test upload rjy
-
-## test download rjy (change online)
 
