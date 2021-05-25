@@ -55,6 +55,7 @@ Page({
                 confirmColor: "#4169E1"
             })
         }
+
         else{
             const app = getApp();
             var time = new Date();

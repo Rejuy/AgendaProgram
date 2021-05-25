@@ -1,8 +1,10 @@
+
 // miniprogram/pages/page_main/page_main.js
 const util_date = require("../../utils/date.js");
 const util_eventFlush = require("../../utils/eventFlush.js");
 const util_dbOp = require("../../utils/dbOp.js");
 const util_event = require("../../utils/event.js");
+
 Page({
 
     data: {
@@ -22,12 +24,14 @@ Page({
         },{
             "viewName":"user"}
         ],
+
         userStat:{},
         events:[],
         displayEvents:[],
         todayReminds:[],
         todayIfShow:[],
         ifShowRefineDDL:[]
+
     },
     tapNaviBtn: function(e){
         //var app = getApp();
@@ -251,7 +255,6 @@ Page({
             day: time.getDay()
         }
         util_eventFlush.openAppFlush(thisPage);
-        
-    },
+    }
 
 })
