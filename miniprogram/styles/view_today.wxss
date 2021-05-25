@@ -51,6 +51,10 @@
 .todayOpBtns{
     display:flex;
     width: 100%;
+    border-bottom-color: #D2D2D2;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    box-sizing: border-box;
 }
 .todayOpBtn{
     color:#4169E1;
