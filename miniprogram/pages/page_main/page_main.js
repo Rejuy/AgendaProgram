@@ -24,18 +24,15 @@ Page({
         },{
             "viewName":"user"}
         ],
-
         userStat:{},
         events:[],
         displayEvents:[],
         todayReminds:[],
         todayIfShow:[],
         ifShowRefineDDL:[]
-
     },
+
     tapNaviBtn: function(e){
-        //var app = getApp();
-        //console.log(app.globalData);
         var id = e.currentTarget.id;
         var to = id.charAt(id.length-1);
         var from = this.data.viewNo;
@@ -47,6 +44,7 @@ Page({
             })
         }
     },
+
     tapSubNaviBtn: function(e){
         var view = this.data.viewNo
         var id = e.currentTarget.id;
@@ -64,7 +62,7 @@ Page({
     doFinish:function(e){   
         var mainPage = this;
         wx.showModal({
-            content:"确认完成任务吗",
+            title:"确认完成任务吗",
             showCancel:true,
             confirmText:"确认",
             confirmColor: "#4169E1",
@@ -72,57 +70,43 @@ Page({
             cancelColor: "#B40014",
             success: function(res){
                 if(!res.cancel){
-                    //const db = wx.cloud.database();
                     var id=e.target.id;
-                    //var index=id.charAt(id.length-1);
-                    //可能有bug，因为条数可能超过10
                     var index = Number(id.substring(7,id.length));
-
                     util_dbOp.dbFinish(index, mainPage);
-
-                    util_eventFlush.finishFlush(index, mainPage);
                 }
             }
         });
     },
 
     doGiveUp:function(e){   
-        var id=e.target.id;
-        var index=id.charAt(id.length-1);
-        const db = wx.cloud.database();
-        var curMainType=this.data.displayEvents[index].mainType;
-        //获取当前点击日期
-        var time = new Date();
-        var curTime={year:time.getFullYear(),month:time.getMonth()+1,date:time.getDate()};
-        if(curMainType=="point"){
-            db.collection('Events').doc(this.data.displayEvents[index]._id).update({
-                data:{
-                    condition:2
+        var mainPage = this;
+        wx.showModal({
+            title:"放弃今日任务吗",
+            showCancel:true,
+            confirmText:"放弃任务",
+            confirmColor: "#4169E1",
+            cancelText: "取消",
+            cancelColor: "#B40014",
+            success: function(res){
+                if(!res.cancel){
+                    var id=e.target.id;
+                    var index = Number(id.substring(7,id.length));
+                    util_dbOp.dbGiveup(index, mainPage);
                 }
-            });
-        }
-        else{
-            db.collection('Events').doc(this.data.displayEvents[index]._id).update({
-                data:{
-                    lastClickTime:curTime   //记录上次点击时间
-                }
-            });
-        }
-
-
-        //调用更新page数据的函数
+            }
+        });
     },
 
     selDelay(e){    //用户选择了delay，那么就在下面弹出“让用户重新输入年月日时分秒”的view
                     //这里也用一个数组来表示，叫做ifShowRefineDDL
         var id = e.target.id;
-        console.log(this.data.ifShowRefineDDL);
+        //console.log(this.data.ifShowRefineDDL);
         var index=id.charAt(id.length-1);
         this.setData({["ifShowRefineDDL["+index+"]"]:true});
     },
 
-    refineFinish(e){    //用户修改完数据，提交或取消
-        console.log(e);
+    refineFinish:function(e){    //用户修改完数据，提交或取消
+        //console.log(e);
         var id=e.currentTarget.id;
         var index=id.charAt(id.length-1);
         this.setData({["ifShowRefineDDL["+index+"]"]:false});
@@ -133,7 +117,7 @@ Page({
         var newTime=e.detail.value;
         var id=e.detail.target.id;
         var index=id.charAt(id.length-1);
-        console.log(e);
+        //console.log(e);
         const db=wx.cloud.database();
         if(!util_date.judgeTimeLegal(newTime)){
             wx.showModal({
@@ -164,49 +148,21 @@ Page({
         var id=e.target.id;
         var index= id.substring(9,10); //abc_10_2
         var ev= id.substring(10,11);
-        console.log("index = "+ index)
-        console.log("ev = " + ev);
+        //console.log("index = "+ index)
+        //console.log("ev = " + ev);
 
         var t=this.data.events[ev][index]._id;
-        console.log(t);
+        //console.log(t);
         db.collection('Events').doc(t)
         .remove()
         .then(res=>{
                 console.log(res)
         })
     },
-    doDelete:function(condition, index){
-        const thisPage = this;
-        const app = getApp();
-        const db = wx.cloud.database();
-        db.collection('Events').doc(thisPage.events[condition]._id).remove({
-            success:function(){
-                app.globalData.events[condition].splice(index,1);
-                thisPage.setData({["events["+condition+"]"]:app.globalData.events[condition]});
-                wx.showModal({
-                    title: '已删除',
-                    showCancel:false,
-                    confirmColor: "#4169E1",
-                })    
-            },
-            fail:function(){
-                wx.showModal({
-                    title: '删除失败',
-                    content:'请稍后重试，或检查网络连接',
-                    showCancel:false,
-                    confirmColor: "#4169E1"
-                })  
-            }
-        })
-    },
 
     todayShowDetail:function(e){
-        console.log(e);
         var id = e.target.id;
-        console.log(id);
         var index = id.substring(6, id.length);
-        console.log(index);
-        console.log(this.data.ifShowRefineDDL);
         var now = this.data.todayIfShow[index];
         if(now == true){
             this.setData({["todayIfShow["+index+"]"]:false});
@@ -216,18 +172,18 @@ Page({
     },
 
     openPage_addEvent: function(){
-        // console.log(this.data.events[0])
         wx.navigateTo({
             url:"/pages/page_addEvent/page_addEvent"
         });
     },
 
     onShow:function(){
+        //console.log("onShow begin");
         const app = getApp();
         this.setData({events:app.globalData.events});
-        
+        //console.log(this.data.events);
         this.setData({displayEvents:util_event.tractDisplayEvents(app.globalData.events)});
-        var curIfShow=[];
+        var curIfShow = [];
         for(var i=0;i<this.data.displayEvents.length;i++)
             curIfShow.push(false);
         this.setData({todayIfShow:curIfShow});
