@@ -1,5 +1,6 @@
 const util_event = require("/event.js");
 const util_time = require("/time.js");
+const util_date = require("/date.js");
 
 function addFlush(e, mainPage){
     var thisDate = util_time.getThisTime();
@@ -39,23 +40,29 @@ function updateFlush(preCondi, preInd, nowEvent, mainPage){
 }
 module.exports.updateFlush = updateFlush;
 
-function finishFlush(ind, mainPage){
+function finishFlush(ind, mainPage, e){
     const app = getApp();
-    var e = app.globalData.events[0][ind];
-    e.condition = 1;
-    app.globalData.events[1].push(e);
-    app.globalData.events[0].splice(ind, 1);
+    if(e.condition == 1){
+        app.globalData.events[0].splice(ind, 1);
+        app.globalData.events[1].push(e);
+    }
+    else if(e.condition == 0){
+        app.globalData.events[0][ind] = e;
+    }
     app.globalData.userStat = getUserStat(app.globalData.events);
     mainPage.onShow();
 }
 module.exports.finishFlush = finishFlush;
 
-function giveupFlush(ind, mainPage){
+function giveupFlush(ind, mainPage, e){
     const app = getApp();
-    var e = app.globalData.events[0][ind];
-    e.condition = 2;
-    app.globalData.events[2].push(e);
-    app.globalData.events[0].splice(ind, 1);
+    if(e.condition == 2){
+        app.globalData.events[0].splice(ind, 1);
+        app.globalData.events[2].push(e);
+    }
+    else if(e.condition == 0){
+        app.globalData.events[0][ind] = e;
+    }
     app.globalData.userStat = getUserStat(app.globalData.events);
     mainPage.onShow();
 }
@@ -73,9 +80,8 @@ function openAppFlush(mainPage){
             var preData = res.data;
             var len = preData.length;
             var pastDue = [];
-            //var temp = [];
             var reset = [];
-            for(var i = 0; i < len; i++){
+            for(var i = 0; i < len; i++){  
                 if(preData[i].condition != 0){
                     app.globalData.events[preData[i].condition].push(preData[i]);
                 }
@@ -93,27 +99,68 @@ function openAppFlush(mainPage){
                     app.globalData.events[0].push(preData[i]);
                 }   
                 else{
+                    var dateRange = util_date.getDateRange(preData[i].lastFlushTime, thisDate);
                     if(preData[i].cycleType == "loose"){
-                        if((preData[i].cycleGapUnit == "month" && thisDate.date == 1) || (preData[i].cycleGapUnit == "week" && thisDate.day == 1)){
-                            preData[i].remainDays = preData[i].cycleGapEach;
-                            reset.push(preData[i]);
+                        if(preData[i].cycleGapUnit == "month"){
+                            if(preData[i].lastFlushTime.month != thisDate.month){
+                                preData[i].allTasks += preData[i].cycleGapEach;
+                                preData[i].remainDays = preData[i].cycleGapEach;
+                                preData[i].lastFlushTime = thisDate;
+                                reset.push(preData[i]);
+                            }
+                        }
+                        else{
+                            if(dateRange >= 7){
+                                preData[i].allTasks += preData[i].cycleGapEach;
+                                preData[i].remainDays = preData[i].cycleGapEach;
+                                preData[i].lastFlushTime = thisDate;
+                                reset.push(preData[i]);
+                            }
+                        }
+                    }
+                    else{
+                        if(preData[i].cycleGap == "day"){
+                            if(dateRange >= 1){
+                                preData[i].allTasks += dateRange;
+                                preData[i].lastFlushTime = thisDate;
+                                reset.push(preData[i]);
+                            }
+                        }
+                        else{
+                            if(dateRange >= 7){
+                                var add = Math.ceil(dateRange / 7)*preData[i].cycleTightDays.length;
+                                preData[i].allTasks += add;
+                                preData[i].lastFlushTime = thisDate;
+                                reset.push(preData[i]);
+                            }
                         }
                     }
                     app.globalData.events[0].push(preData[i]);
-                }             
-            }
-            for(var i = 0; i < app.globalData.events[0].length; i++){
-                app.globalData.events[0][i].weight = util_event.getWeight(app.globalData.events[0][i], thisDate);
+                }                       
             }
             for(var i = 0; i < pastDue.length; i++){
-                db.collection('Events').doc(pastDue[i]._id).set({
+                db.collection('Events').doc(pastDue[i]._id).update({
                     data:{condition:2}
                 });
             }
             for(var i = 0; i < reset.length; i++){
-                db.collection('Events').doc(reset[i]._id).set({
-                    data:{remainDays:reset[i].remainDays}
-                });
+                if(reset[i].cycleType == "loose"){
+                    db.collection('Events').doc(reset[i]._id).update({
+                        data:{
+                            remainDays:reset[i].remainDays,
+                            allTasks:reset[i].allTasks,
+                            lastFlushTime:reset[i].lastFlushTime
+                        }
+                    });
+                }
+                else{
+                    db.collection('Events').doc(reset[i]._id).update({
+                        data:{
+                            allTasks:reset[i].allTasks,
+                            lastFlushTime:reset[i].lastFlushTime
+                        }
+                    });
+                }
             }
             function cmp(e1, e2){return e2.weight - e1.weight;}
             app.globalData.events[0].sort(cmp);
@@ -147,6 +194,7 @@ module.exports.openAppFlush = openAppFlush;
 
 
 function getUserStat(events){
+    
     var procCnt = events[0].length;
     var finiCnt = events[1].length;
     var unfiCnt = events[2].length;
