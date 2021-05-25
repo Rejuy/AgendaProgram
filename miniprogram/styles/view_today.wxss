@@ -6,9 +6,6 @@
     align-items: center;
     text-align:center;
     width: 100%;
-    border-bottom-color: #D2D2D2;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
 }
 .todayDisplay{
     width: 100%;
