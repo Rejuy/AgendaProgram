@@ -1,21 +1,16 @@
 <view class="listCell"wx:for="{{events[0]}}" wx:for-index="row" wx:for-item="iname">
     <view class="listCellDisplay">
         <view class="listItemTitle"> 
-       {{events[0][row].abbr}}
+          {{events[0][row].abbr==""?events[0][row].type:events[0][row].abbr}}
         </view>
-        <view class="listItemType">
-            {{todayReminds[row]}}
-        </view>
+        
         <view class="listItemDetail">
-        <view>{{events[0][row].content}}</view>
+          <view>{{events[0][row].content}}</view>
         </view>
-        <view class="listItemBtns">
-            <button class="listItemBtn">
-                <view bindtap="dele" style="color:#4169E1" id="listProc_{{row}}{{0}}" >删除</view>
-            </button>
-        </view>
+        
+        <button class="listItemBtn">
+          <view bindtap="dele" style="color:#4169E1" id="listProc_0_{{row}}" >删除</view>
+        </button>
+        
     </view>
 </view>
-
-
-          

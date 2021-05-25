@@ -22,7 +22,7 @@
         <view class="todayOpBtns" wx:if="{{todayIfShow[index]==true}}">
             <button id="finish_{{index}}" class="todayOpBtn" hover-class="btnPress" bindtap="doFinish">完成</button>
             <button id="delay_{{index}}" class="todayOpBtn" bindtap="selDelay"wx:if="{{displayEvents[index].mainType=='point'}}">延后</button>
-            <button class="todayOpBtn">放弃</button>
+            <button class="todayOpBtn" bindtap="doGiveUp">放弃</button>
         </view>
         
         
