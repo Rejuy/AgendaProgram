@@ -1,4 +1,10 @@
-# 云开发 quickstart
+## 5.24.23:59-5.25.8:27改动：
+*1.修复添加周期、时间段任务*
+*2.修复tractDisplayEvents函数*
+
+
+
+# 云开发 slowend
 
 这是云开发的快速启动指引，其中演示了如何上手使用云开发的三大基础能力：
 
@@ -9,4 +15,6 @@
 ## 参考文档
 
 - [云开发文档](https://developers.weixin.qq.com/miniprogram/dev/wxcloud/basis/getting-started.html)
+
+1111111111111111111
 

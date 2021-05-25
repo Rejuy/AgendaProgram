@@ -2,7 +2,7 @@
 @import "/styles/addEvent.wxss";
 @import "/styles/view_list.wxss";
 @import "/styles/view_today.wxss";
-
+@import "/styles/view_user.wxss";
 
 .viewMain{
     height: 90%;

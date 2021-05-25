@@ -7,6 +7,7 @@ App({
     ifLogin:false,
     events:[[],[],[]],
     thisDate:[],
+    userStat:{}
   },
 
   

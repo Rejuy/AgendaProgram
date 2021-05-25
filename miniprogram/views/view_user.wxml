@@ -1,2 +1,57 @@
+<view class="userInfo">
+    <view class="userInfoPortrait">
+       <open-data type="userAvatarUrl"></open-data>
+    </view>
+    <view class="userInfoText">
+        <open-data type="userNickName"></open-data>
+    </view>
+</view>
 
-    <view>user</view>
+<view class="userDisplay">
+
+    <view class="userDisplayUnit">
+        <view class="userDisplayTitle">
+            进行中
+        </view>
+        <view class="userDisplayContent">
+            共　{{userStat.procNum}}　项
+        </view>
+    </view>
+
+    <view class="userDisplayUnit">
+        <view class="userDisplayTitle">
+           已完成
+        </view>
+        <view class="userDisplayContent">
+            共　{{userStat.finiNum}}　项
+        </view>
+    </view>
+
+    <view class="userDisplayUnit">
+        <view class="userDisplayTitle">
+            未完成
+        </view>
+        <view class="userDisplayContent">
+            共　{{userStat.unfiNum}}　项
+        </view>
+    </view>
+
+    <view class="userDisplayUnit">
+        <view class="userDisplayTitle">
+            类型占比
+        </view>
+        <view class="userDisplayContent">
+            <view style="display:flex;justify-content:conter;align-items:center">
+                生活{{userStat.lifePercent}}%　
+            </view>
+            <view>
+                学习{{userStat.studyPercent}}%　
+            </view>
+            <view>
+                工作{{userStat.workPercent}}%　
+            </view>
+              
+        </view>
+    </view>
+
+</view>

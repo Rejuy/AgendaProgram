@@ -50,7 +50,7 @@
                 <view style="display:flex;align-items:center" wx:if="{{mainType == 'point'}}">
                     <input style="width:60%" name="year" value="{{mainType=='point'?nowTime[0]:0}}" type="number" maxlength="{{mainType=='point'?4:1}}"/>年
                 </view>
-                <view style="display:flex;align-items:center">
+                <view style="display:flex;align-items:center" wx:if="{{mainType=='point'}}">
                     <input style="width:60%" name="month" value="{{mainType=='point'?nowTime[1]:0}}" type="number" maxlength="2"/>月
                 </view>
                 <view style="display:flex;align-items:center" wx:if="{{mainType == 'point'}}">
@@ -58,6 +58,23 @@
                 </view>
                 <view style="display:flex;align-items:center" wx:if="{{mainType == 'period'}}">
                     <input style="width:60%" name="date" value="0" type="number" maxlength="2"/>天
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <view class="itemUnit" style="height:10%" wx:if="{{mainType=='point'}}">      
+        <view class="unitText"></view>
+        <view class="unitBody" style="flex-direction:column;justify-content:space-around">
+            <view style="display:flex;">
+                <view style="display:flex;align-items:center">
+                    <input style="width:60%" name="hour" value="{{23}}" type="number" maxlength="{{2}}"/>时
+                </view>
+                <view style="display:flex;align-items:center">
+                    <input style="width:60%" name="minute" value="{{59}}" type="number" maxlength="2"/>分
+                </view>
+                <view style="display:flex;align-items:center">
+                    <input style="width:60%" name="second" value="{{0}}" type="number" maxlength="2"/>秒
                 </view>
             </view>
         </view>
