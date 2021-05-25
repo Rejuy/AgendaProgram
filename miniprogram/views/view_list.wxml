@@ -1,0 +1,35 @@
+<view class="naviSub">
+    <button class="naviSubBtn" id="naviSubBtn_{{viewNo}}_{{i}}"
+        size="default"
+        wx:for="{{views[viewNo].text}}"
+        wx:for-index="i"
+        bindtap="tapSubNaviBtn">
+       
+        <view class="naviSubText_{{views[viewNo].state[i]}}">
+            {{views[viewNo].text[i]}}
+        </view>
+       
+    </button>
+</view>
+<view class="listDisplay">
+    <view class="listCell"wx:for="{{events[subViewNo]}}" wx:for-index="row" wx:for-item="iname">
+        <view class="listCellDisplay">
+            <view class="listItemTitle"> 
+            {{events[subViewNo][row].abbr==""?events[subViewNo][row].type:events[subViewNo][row].abbr}}
+            </view>
+            
+            <view class="listItemDetail">
+            <view>{{events[subViewNo][row].content}}</view>
+            </view>
+            
+            <button class="listItemBtn">
+            <view bindtap="dele" style="color:#4169E1" id="listProc_{{subViewNo}}_{{row}}" >删除</view>
+            </button>
+            
+        </view>
+    </view>
+</view>
+
+
+
+
