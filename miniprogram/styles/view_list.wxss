@@ -3,14 +3,10 @@
     display: flex;
     box-sizing: border-box;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
     height: 400rpx;
-    /* box-sizing: border-box;
-    border-style: solid;
-    border-width: 1px;
-    border-color: black; */
 }
 .listCellDisplay{
     display: flex;
@@ -19,35 +15,21 @@
     align-items: center;
     height: 90%;
     width: 100%;
-    /* height: 80%; */
     background-color: white;
     border-radius: 80rpx;
-
-
-    /* box-sizing: border-box;
-    border-style: solid;
-    border-width: 1px;
-    border-color: black; */
 }
 .listItemTitle{
-    /* top:100%; */
     color:#4169E1;
     width: 95%;
-    height: 20%;
-    font-size: 34rpx;
+    height: 40rpx;
+    font-size: 36rpx;
     font-weight: bold;
     text-align: center;
-    box-sizing: border-box;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-bottom-color: #D2D2D2;
 }
 .listItemType{
-    /* top:100%; */
     width: 100%;
     height: 15%;
     font-size: 32rpx;
-    /* align-items: center; */
     text-align: center;
 
     box-sizing: border-box;
@@ -59,16 +41,19 @@
     border-bottom-color: #D2D2D2;
 }
 .listItemDetail{
-    width: 100%;
+    width: 95%;
     height: 50%;
-    font-size: 32rpx;
+    font-size: 36rpx;
     align-items: center;
-    overflow: scroll;
+    word-break: break-all;
+    overflow: auto;
 
-    box-sizing: border-box;
     border-bottom-style: solid;
     border-bottom-width: 1px;
     border-bottom-color: #D2D2D2;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: #D2D2D2;
 }
 .listItemBtns{
     height: 20%;
@@ -81,8 +66,8 @@
     width: 40% !important;
     align-items: center;
     font-size:34rpx;
-    font-weight: bold;
-    height: 20% !important;
+    font-weight: normal;
+    height: 60rpx;
 }
 .listDisplay{
     display: flex;
@@ -91,8 +76,4 @@
     height: 95%;
     bottom:0%;
     overflow: auto;
-    /* box-sizing: border-box;
-    border-style: solid;
-    border-color: black;
-    border-width: 1px; */
 }
