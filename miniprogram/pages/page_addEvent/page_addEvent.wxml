@@ -57,7 +57,7 @@
                     <input style="width:60%" name="date" value="{{nowTime[2]}}" type="number" maxlength="2"/>日
                 </view>
                 <view style="display:flex;align-items:center" wx:if="{{mainType == 'period'}}">
-                    <input style="width:60%" name="date" value="0" type="number" maxlength="2"/>天
+                    <input style="width:60%" name="date" value="1" type="number" maxlength="2"/>天
                 </view>
             </view>
         </view>

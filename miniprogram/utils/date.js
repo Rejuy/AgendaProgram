@@ -40,6 +40,7 @@ function getDateRange(d1,d2){
 }
 module.exports.getDateRange = getDateRange;
 function judgeTimeLegal(data){
+    
     var time=new Date();
     if(data.month>12||data.month<1)
         return false;

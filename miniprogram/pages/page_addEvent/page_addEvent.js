@@ -1,5 +1,6 @@
 const util_date = require("../../utils/date.js");
 const util_eventFlush = require("../../utils/eventFlush.js");
+const util_time = require("../../utils/time.js");
 Page({
 
     data: {
@@ -38,25 +39,30 @@ Page({
 
     submitForm:function(e){
         var addData = e.detail.value;
-        console.log(e);
+        //console.log(e);
+        var legal=true;
+        var content="";
         if(this.data.mainType=="point"&&!util_date.judgeTimeLegal(addData)){
-            wx.showModal({
-                title: '添加失败',
-                content:'您输入的日期或时间不合法，请重新设置',
-                showCancel:false,
-                confirmColor: "#4169E1"
-            })
+            content='您输入的日期或时间不合法，请重新设置';
+            legal=false;
         }
-        else if(this.data.mainType=="cycle"&&this.data.cycleType=="tight"&&addData.cycleTightDays.length==0){
+        else if(addData.mainType=="cycle"&&addData.cycleType=="tight"&&addData.cycleGap=="week"&&addData.cycleTightDays.length==0){
+            content='您每周中选择的日期为零，请重新设置';
+            legal=false;
+        }
+        else if(addData.mainType=="period"&&addData.date<=0){
+            content='您选择的天数不合法，请重新设置';
+            legal=false;
+        }
+        if(!legal){
             wx.showModal({
                 title: '添加失败',
-                content:'您每周中选择的日期为零，请重新设置',
+                content:content,
                 showCancel:false,
                 confirmColor: "#4169E1"
             })
         }
         else{
-            const app = getApp();
             var time = new Date();
             addData.condition = 0;
             addData.updateTime = {year:time.getFullYear(),month:time.getMonth()+1,date:time.getDate(),day:time.getDay()};
@@ -74,14 +80,31 @@ Page({
             addData.lastClickTime={
                 year:0,month:1,date:1
             }
+            addData.lastFlushTime = util_time.getThisTime();
+            if(addData.mainType=="cycle"){
+                if(addData.cycleType=="loose"){
+                    addData.allTasks = addData.cycleGapEach;
+                }
+                else{
+                    if(addData.cycleGap == "day"){
+                        addData.allTasks = 1;
+                    }
+                    else{
+                        addData.allTasks = addData.cycleTightDays.length;
+                    }
+                }
+                addData.finiTasks = 0;
+            }
 
             const db = wx.cloud.database();
             db.collection('Events').add({
                 data:addData,
-                success:function(res){   
+                success:function(res){ 
+                    addData._id = res._id;
                     let pages = getCurrentPages();    
                     let prevPage = pages[pages.length-2];
                     util_eventFlush.addFlush(addData, prevPage);
+                    //console.log("addData = " + addData);
                     wx.showModal({
                         title: '添加成功',
                         showCancel:false,

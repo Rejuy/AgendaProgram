@@ -1,3 +1,4 @@
+const util_time = require("/time.js");
 function getWeight(e, thisDate){
   // console.log("e: "+ e);
   // console.log("thisDate: "+thisDate);
@@ -56,89 +57,52 @@ function getWeight(e, thisDate){
 }
 module.exports.getWeight = getWeight;
 
-function cmpTime(t1,t2,cmpDay){  
-  //cmpDay==true则比较日期，否则比较到分和秒
-  //t1>t2返回1,t1==t2返回0,t1<t2返回-1
-  if(cmpDay==false){
-    if(t1.year>t2.year)
-      return 1;
-    else if(t1.year==t2.year){
-      if(t1.month>t2.month)
-        return 1;
-      else if(t1.month==t2.month){
-        if(t1.date>t2.date)
-          return 1;
-        else if(t1.date==t2.date){
-          if(t1.hour>t2.hour)
-            return 1;
-          else if(t1.hour==t2.hour){
-            if(t1.minute>t2.minute)
-              return 1;
-            else if(t1.minute==t2.minute){
-              if(t1.second>t2.second)
-                return 1;
-              else if(t1.second==t2.second){
-                return 0;
-              }
-            } 
+function tractDisplayEvents(events){
+  var curTime = util_time.getThisTime();
+  var ret = [];
+  for(var i=0;i<events[0].length;i++){
+    var e = events[0][i];
+    var todayClicked = (e.lastClickTime.year==curTime.year&&e.lastClickTime.month==curTime.month&&e.lastClickTime.date==curTime.date);
+    if(e.mainType == "point"){
+      ret.push(e);
+      ret[ret.length-1].mainIndex = i;
+    }
+    else if(e.mainType == "period"){
+      if(!todayClicked){
+        ret.push(e);
+        ret[ret.length-1].mainIndex = i;
+      }
+    }
+    else{
+      if(e.cycleType == "tight"){
+        if(e.cycleGap == "day"){
+          if(!todayClicked){
+            ret.push(e);
+            ret[ret.length-1].mainIndex = i;
+          }
+        }
+        else{
+          var isToday = false;
+          for(var j = 0; j < e.cycleTightDays.length; j++){
+
+            if(curTime.day.toString() == e.cycleTightDays[j]){
+              isToday = true; break;
+            }
+          }
+          if(!todayClicked && isToday){
+            ret.push(e);
+            ret[ret.length-1].mainIndex = i;
           }
         }
       }
-    }
-    return -1;
-  }
-  else{
-    if(t1.year>t2.year)
-      return 1;
-    else if(t1.year==t2){
-      if(t1.month>t2.month)
-        return 1;
-      else if(t1.month==t2.month){
-        if(t1.date>t2.date)
-          return 1;
-        else if(t1.date==t2.date){
-          return 0;
+      else{
+        if(!todayClicked){
+          ret.push(e);
+          ret[ret.length-1].mainIndex = i;
         }
       }
     }
-    return -1;
   }
-}
-module.exports.cmpTime = cmpTime;
-
-function tractDisplayEvents(events){
-  var time=new Date();
-  var curYear=time.getFullYear();
-  var curMonth=time.getMonth()+1;
-  var curDate=time.getDate();
-  var curHour=time.getHours();
-  var curMinute=time.getMinutes();
-  var curSecond=time.getSeconds();
-  var curTime={
-    year:curYear,
-    month:curMonth,
-    date:curDate,
-    hour:curHour,
-    minute:curMinute,
-    second:curSecond
-  };
-  var displayEvents=[];
-  //console.log("ev0: " + events[0])
-  //console.log(curTime);
-  for(var i=0;i<events[0].length;i++){
-    if(events[0][i].mainType=="point"){
-      if(cmpTime(events[0][i],curTime,false)==1)
-        displayEvents.push(events[0][i]);
-    }
-    else if(events[0][i].mainType=="cycle"&&events[0][i].cycleGap=="week"&&events[0][i].cycleType=="tight"){
-      if(cmpTime(events[0][i].lastClickTime,curTime,true)==-1&&events[0][i].cycleTightDays.indexOf(time.getDay())>=0)
-        displayEvents.push(events[0][i]);
-    }
-    else{
-      if(cmpTime(events[0][i].lastClickTime,curTime,true)==-1)
-        displayEvents.push(events[0][i]);
-    }
-  }
-  return displayEvents;
+  return ret;
 }
 module.exports.tractDisplayEvents=tractDisplayEvents;

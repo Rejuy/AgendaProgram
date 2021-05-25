@@ -7,22 +7,38 @@
 </view>
 <view class="todayDisplay">
     <view class="todayCell" wx:for="{{displayEvents}}" >
-        <button id="today_{{index}}" class="todayItem" hover-class="btnPress" bindtap="todayShowDetail">
-            <!-- <view>{{item.abbr==""? item.type: item.abbr}}</view> -->
-            <!-- <view>123</view> -->
+  
+            <button id="today_{{index}}" class="todayItem" hover-class="btnPress" bindtap="todayShowDetail">
             {{item.abbr==""? item.type: item.abbr}}
-        </button>
-        <view wx:if="{{todayIfShow[index]==true}}">
-            余......
+            </button>
+            <text class="todayText" wx:if="{{displayEvents[index].mainType=='point'}}">
+            时间点类型任务
+            </text>
+            <text class="todayText" wx:if="{{displayEvents[index].mainType=='period'}}">
+            时间段类型任务
+            </text>
+            <text class="todayText" wx:if="{{displayEvents[index].mainType=='cycle'}}">
+            周期类型任务
+            </text>
+        
+
+        
+        
+        <view wx:if="{{todayIfShow[index]==true&&(displayEvents[index].mainType=='period'||displayEvents[index].cycleType=='loose')}}">
+            时间段/周期内剩余{{displayEvents[index].remainDays}}天
         </view>
         
         <view class="todayDetail" wx:if="{{todayIfShow[index]==true&&item.content!=''}}">
-            
+            {{item.content}}
         </view>
+
         <view class="todayOpBtns" wx:if="{{todayIfShow[index]==true}}">
             <button id="finish_{{index}}" class="todayOpBtn" hover-class="btnPress" bindtap="doFinish">完成</button>
             <button id="delay_{{index}}" class="todayOpBtn" bindtap="selDelay"wx:if="{{displayEvents[index].mainType=='point'}}">延后</button>
-            <button class="todayOpBtn">放弃</button>
+            <button id="giveup_{{index}}"class="todayOpBtn" bindtap="doGiveUp" wx:if="{{displayEvents[index].mainType=='point'}}">放弃
+            </button>
+            <button id="stop_{{index}}"class="todayOpBtn" bindtap="doGiveUp" wx:if="{{displayEvents[index].mainType!='point'}}">终止
+            </button>
         </view>
         
         

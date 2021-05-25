@@ -11,9 +11,28 @@
        
     </button>
 </view>
+<view class="listDisplay">
+    <view class="listCell" style="height:{{events[subViewNo][row].content!=''? 400 :200}}rpx"
+    wx:for="{{events[subViewNo]}}" 
+    wx:for-index="row" 
+    wx:for-item="iname">
+        <view class="listCellDisplay">
+            <view class="listItemTitle"> 
+                {{events[subViewNo][row].abbr==""?events[subViewNo][row].type:events[subViewNo][row].abbr}}
+            </view>
+            
+            <view class="listItemDetail" wx:if="{{events[subViewNo][row].content!=''}}">
+                <view>{{events[subViewNo][row].content}}</view>
+            </view>
+            
+            <button class="listItemBtn">
+                <view bindtap="dele" style="color:black" id="listProc_{{subViewNo}}_{{row}}" >删除</view>
+            </button>
+            
+        </view>
+    </view>
+</view>
 
-<include wx:if="{{subViewNo == 0}}" src="/views/view_list_proc" />
-<include wx:if="{{subViewNo == 1}}" src="/views/view_list_fini" />
-<include wx:if="{{subViewNo == 2}}" src="/views/view_list_unfi" />
+
 
 
