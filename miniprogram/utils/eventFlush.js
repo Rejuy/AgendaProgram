@@ -194,7 +194,10 @@ module.exports.openAppFlush = openAppFlush;
 
 
 function getUserStat(events){
+    
     var len0 = events[0].length, len1 = events[1].length, len2 = events[2].length;
+    //console.log(len0)
+    var notCycleNum = 0;
     var tLife = 0, tStudy = 0, tWork = 0;
     var cycles = [], cycleEachPct = [];
     var notCycleCnt = [0,0,0];
@@ -202,14 +205,14 @@ function getUserStat(events){
         for(var j = 0; j < events[i].length; j++){
             var e = events[i][j];
             if(e.mainType == "cycle"){cycles.push(e);}
-            else{notCycleCnt[i]++;}
+            else{notCycleCnt[i]++; notCycleNum++;}
             if(events[i][j].type == "生活"){tLife++;}
             else if(events[i][j].type == "学习"){tStudy++;}
             else{tWork++;}
         }
     }
     var totalTasks = 0, totalFiniTasks = 0;
-    console.log(cycles)
+    //console.log(cycles)
     for(var i = 0; i < cycles.length; i++){
         cycleEachPct.push(Math.round(cycles[i].finiTasks / cycles[i].allTasks * 100));
         totalTasks += cycles[i].allTasks;
@@ -223,12 +226,12 @@ function getUserStat(events){
             totalPct: (cycles.length==0)? "-": Math.round(totalFiniTasks/totalTasks*100)
         },
         notCycle:{
-            nums: len0 + len1,
+            nums: notCycleNum,
             cnt: notCycleCnt,
-            pct: (len0+len1 == 0)? ["-", "-", "-"]: [
-                Math.round(notCycleCnt[0] / (len0+len1) * 100),
-                Math.round(notCycleCnt[1] / (len0+len1) * 100),
-                Math.round(notCycleCnt[2] / (len0+len1) * 100)
+            pct: (notCycleNum == 0)? ["-", "-", "-"]: [
+                Math.round(notCycleCnt[0] / notCycleNum * 100),
+                Math.round(notCycleCnt[1] / notCycleNum * 100),
+                Math.round(notCycleCnt[2] / notCycleNum * 100)
             ] 
         },
         total:{
@@ -240,6 +243,6 @@ function getUserStat(events){
                 }                
         }
     };
-    console.log("stat end")
+    //console.log("stat end")
     return ret;
 }
