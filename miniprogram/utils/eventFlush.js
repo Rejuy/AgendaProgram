@@ -200,26 +200,54 @@ module.exports.openAppFlush = openAppFlush;
 
 function getUserStat(events){
     
-    var procCnt = events[0].length;
-    var finiCnt = events[1].length;
-    var unfiCnt = events[2].length;
-    var total = procCnt + finiCnt + unfiCnt;
-    var life = 0, study = 0, work = 0;
+    var len0 = events[0].length, len1 = events[1].length, len2 = events[2].length;
+    //console.log(len0)
+    var notCycleNum = 0;
+    var tLife = 0, tStudy = 0, tWork = 0;
+    var cycles = [], cycleEachPct = [];
+    var notCycleCnt = [0,0,0];
     for(var i = 0; i < 3; i++){
         for(var j = 0; j < events[i].length; j++){
-            if(events[i][j].type == "生活"){life++;}
-            else if(events[i][j].type == "学习"){study++;}
-            else{work++;}
+            var e = events[i][j];
+            if(e.mainType == "cycle"){cycles.push(e);}
+            else{notCycleCnt[i]++; notCycleNum++;}
+            if(events[i][j].type == "生活"){tLife++;}
+            else if(events[i][j].type == "学习"){tStudy++;}
+            else{tWork++;}
         }
     }
-    var stat = {
-        procNum:procCnt,
-        finiNum:finiCnt,
-        unfiNum:unfiCnt,
-        totalNum:total,
-        lifePercent:(life/total*100).toFixed(0),
-        studyPercent:(study/total*100).toFixed(0),
-        workPercent:(work/total*100).toFixed(0)
+    var totalTasks = 0, totalFiniTasks = 0;
+    //console.log(cycles)
+    for(var i = 0; i < cycles.length; i++){
+        cycleEachPct.push(Math.round(cycles[i].finiTasks / cycles[i].allTasks * 100));
+        totalTasks += cycles[i].allTasks;
+        totalFiniTasks += cycles[i].finiTasks;
     }
-    return stat;
+    var ret = {
+        cycle:{
+            nums: cycles.length,
+            arr: cycles,
+            eachPct: cycleEachPct,
+            totalPct: (cycles.length==0)? "-": Math.round(totalFiniTasks/totalTasks*100)
+        },
+        notCycle:{
+            nums: notCycleNum,
+            cnt: notCycleCnt,
+            pct: (notCycleNum == 0)? ["-", "-", "-"]: [
+                Math.round(notCycleCnt[0] / notCycleNum * 100),
+                Math.round(notCycleCnt[1] / notCycleNum * 100),
+                Math.round(notCycleCnt[2] / notCycleNum * 100)
+            ] 
+        },
+        total:{
+            nums: len0 + len1 + len2,
+            pct: (len0+len1+len2 == 0)? {life:"-",study:"-",work:"-"}: {
+                    life: Math.round(tLife / (len0+len1+len2) * 100),
+                    study: Math.round(tStudy / (len0+len1+len2) * 100),
+                    work: Math.round(tWork / (len0+len1+len2) * 100)
+                }                
+        }
+    };
+    //console.log("stat end")
+    return ret;
 }

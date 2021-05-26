@@ -157,20 +157,25 @@ Page({
     },
 
     dele(e){
-        const db = wx.cloud.database();
-        var id=e.target.id;
-        var index= id.substring(9,10); //abc_10_2
-        var ev= id.substring(10,11);
-        //console.log("index = "+ index)
-        //console.log("ev = " + ev);
-
-        var t=this.data.events[ev][index]._id;
-        //console.log(t);
-        db.collection('Events').doc(t)
-        .remove()
-        .then(res=>{
-                console.log(res)
-        })
+        //console.log("yy")
+        var mainPage = this;
+        wx.showModal({
+            title:"确认删除此项记录吗",
+            content:"删除后不能找回，并且不再统计此项记录",
+            showCancel:true,
+            confirmText:"删除记录",
+            confirmColor: "#B40014",
+            cancelText: "取消",
+            cancelColor: "black",
+            success: function(res){
+                if(!res.cancel){
+                    var id = e.target.id;
+                    var condition = id.substring(9,10);
+                    var index = id.substring(11, id.length);
+                    util_dbOp.dbDelete(condition, index, mainPage);
+                }
+            }
+        });
     },
 
     todayShowDetail:function(e){
@@ -199,8 +204,11 @@ Page({
         var curIfShow = [];
         for(var i=0;i<this.data.displayEvents.length;i++)
             curIfShow.push(false);
-        this.setData({todayIfShow:curIfShow});
-        this.setData({ifShowRefineDDL:curIfShow});
+        this.setData({
+            todayIfShow:curIfShow,
+            ifShowRefineDDL:curIfShow,
+            userStat: app.globalData.userStat
+        });
     },
 
     onLoad: function (options) {

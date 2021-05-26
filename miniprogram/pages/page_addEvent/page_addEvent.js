@@ -62,6 +62,7 @@ Page({
                 confirmColor: "#4169E1"
             })
         }
+
         else{
             var time = new Date();
             addData.condition = 0;
