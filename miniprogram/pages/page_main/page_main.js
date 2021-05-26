@@ -80,17 +80,30 @@ Page({
 
     doGiveUp:function(e){   
         var mainPage = this;
+        var text="";
+        var title="";
+        var startIndex=0;
+        var id=e.target.id;
+        if(id[0]=='g'){
+            title="放弃今日任务吗？";
+            text="放弃任务";
+            startIndex=7;
+        }
+        else{
+            title="永久终止该任务吗？";
+            text="终止任务";
+            startIndex=5;
+        }
         wx.showModal({
-            title:"放弃今日任务吗",
+            title:title,
             showCancel:true,
-            confirmText:"放弃任务",
+            confirmText:text,
             confirmColor: "#4169E1",
             cancelText: "取消",
             cancelColor: "#B40014",
             success: function(res){
                 if(!res.cancel){
-                    var id=e.target.id;
-                    var index = Number(id.substring(7,id.length));
+                    var index = Number(id.substring(startIndex,id.length));
                     util_dbOp.dbGiveup(index, mainPage);
                 }
             }

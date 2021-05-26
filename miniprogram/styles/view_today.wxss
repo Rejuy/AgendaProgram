@@ -12,6 +12,9 @@
     height: 90%;
     overflow: scroll;
 }
+.todayText{
+    display: flex;
+}
 .todayItem{
     display: flex;
     justify-content: center;
