@@ -27,6 +27,11 @@
         <view wx:if="{{todayIfShow[index]==true&&(displayEvents[index].mainType=='period'||displayEvents[index].cycleType=='loose')}}">
             时间段/周期内剩余{{displayEvents[index].remainDays}}天
         </view>
+        <view wx:if="{{todayIfShow[index]==true&&displayEvents[index].mainType=='point'}}">
+            截止时间：
+            {{displayEvents[index].year}}年{{displayEvents[index].month}}月{{displayEvents[index].date}}日
+            {{displayEvents[index].hour}}时{{displayEvents[index].minute}}分{{displayEvents[index].second}}秒
+        </view>
         
         <view class="todayDetail" wx:if="{{todayIfShow[index]==true&&item.content!=''}}">
             {{item.content}}

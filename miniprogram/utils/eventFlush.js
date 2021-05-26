@@ -1,6 +1,8 @@
 const util_event = require("/event.js");
 const util_time = require("/time.js");
 const util_date = require("/date.js");
+const { getWeight } = require("./event");
+const { getThisTime } = require("./time");
 
 function addFlush(e, mainPage){
     var thisDate = util_time.getThisTime();
@@ -162,6 +164,9 @@ function openAppFlush(mainPage){
                     });
                 }
             }
+            //重新计算app.globalData.events[0]中事件权重
+            for(var i=0;i<app.globalData.events[0].length;i++)
+                app.globalData.events[0][i].weight=getWeight(app.globalData.events[0][i],getThisTime());
             function cmp(e1, e2){return e2.weight - e1.weight;}
             app.globalData.events[0].sort(cmp);
             app.globalData.userStat = getUserStat(app.globalData.events);
