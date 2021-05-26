@@ -2,6 +2,29 @@ const db = wx.cloud.database();
 const util_time = require("/time.js");
 const util_eventFlush = require("/eventFlush.js");
 
+function dbDelete(condition, index, mainPage){
+    var id = mainPage.data.events[condition][index]._id;
+    db.collection('Events').doc(id).remove({
+        success:function(){
+            util_eventFlush.deleteFlush(condition, index, mainPage);
+            wx.showModal({
+                title: '已删除',
+                showCancel:false,
+                confirmColor: "#4169E1"
+            })   
+        },
+        fail:function(){
+            wx.showModal({
+                title: '删除失败',
+                content:'请稍后重试，或检查网络连接',
+                showCancel:false,
+                confirmColor: "#4169E1"
+            })
+        }
+    });
+}
+module.exports.dbDelete = dbDelete;
+
 function dbFinish(index, mainPage){
     var curTime = util_time.getThisTime();
     var event = mainPage.data.displayEvents[index];
@@ -50,18 +73,17 @@ function dbFinish(index, mainPage){
 module.exports.dbFinish = dbFinish;
 
 function dbGiveup(index, mainPage){
-    var curTime = util_time.getThisTime();
-    var event = mainPage.data.evedisplayEvents[index];
-    if(event.mainType == "point"){
+    //console.log(index)
+    var event = mainPage.data.displayEvents[index];
+    if(event.mainType != "cycle"){
         event.condition = 2;
     }
     else{
-        event.lastClickTime = curTime;
+        event.condition = (event.allTasks > event.finiTasks)? 2: 1;
     }
     db.collection('Events').doc(event._id).update({
         data:{
             condition:event.condition,
-            lastClickTime:event.lastClickTime
         },
         success:function(){
             util_eventFlush.giveupFlush(event.mainIndex, mainPage, event);
@@ -82,3 +104,4 @@ function dbGiveup(index, mainPage){
     })
 }
 module.exports.dbGiveup = dbGiveup;
+

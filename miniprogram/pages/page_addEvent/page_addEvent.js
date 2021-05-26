@@ -40,18 +40,24 @@ Page({
     submitForm:function(e){
         var addData = e.detail.value;
         //console.log(e);
+        var legal=true;
+        var content="";
         if(this.data.mainType=="point"&&!util_date.judgeTimeLegal(addData)){
-            wx.showModal({
-                title: '添加失败',
-                content:'您输入的日期或时间不合法，请重新设置',
-                showCancel:false,
-                confirmColor: "#4169E1"
-            })
+            content='您输入的日期或时间不合法，请重新设置';
+            legal=false;
         }
         else if(addData.mainType=="cycle"&&addData.cycleType=="tight"&&addData.cycleGap=="week"&&addData.cycleTightDays.length==0){
+            content='您每周中选择的日期为零，请重新设置';
+            legal=false;
+        }
+        else if(addData.mainType=="period"&&addData.date<=0){
+            content='您选择的天数不合法，请重新设置';
+            legal=false;
+        }
+        if(!legal){
             wx.showModal({
                 title: '添加失败',
-                content:'您每周中选择的日期为零，请重新设置',
+                content:content,
                 showCancel:false,
                 confirmColor: "#4169E1"
             })

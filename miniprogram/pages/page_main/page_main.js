@@ -80,17 +80,30 @@ Page({
 
     doGiveUp:function(e){   
         var mainPage = this;
+        var text="";
+        var title="";
+        var startIndex=0;
+        var id=e.target.id;
+        if(id[0]=='g'){
+            title="放弃今日任务吗？";
+            text="放弃任务";
+            startIndex=7;
+        }
+        else{
+            title="永久终止该任务吗？";
+            text="终止任务";
+            startIndex=5;
+        }
         wx.showModal({
-            title:"放弃今日任务吗",
+            title:title,
             showCancel:true,
-            confirmText:"放弃任务",
+            confirmText:text,
             confirmColor: "#4169E1",
             cancelText: "取消",
             cancelColor: "#B40014",
             success: function(res){
                 if(!res.cancel){
-                    var id=e.target.id;
-                    var index = Number(id.substring(7,id.length));
+                    var index = Number(id.substring(startIndex,id.length));
                     util_dbOp.dbGiveup(index, mainPage);
                 }
             }
@@ -144,20 +157,25 @@ Page({
     },
 
     dele(e){
-        const db = wx.cloud.database();
-        var id=e.target.id;
-        var index= id.substring(9,10); //abc_10_2
-        var ev= id.substring(10,11);
-        //console.log("index = "+ index)
-        //console.log("ev = " + ev);
-
-        var t=this.data.events[ev][index]._id;
-        //console.log(t);
-        db.collection('Events').doc(t)
-        .remove()
-        .then(res=>{
-                console.log(res)
-        })
+        //console.log("yy")
+        var mainPage = this;
+        wx.showModal({
+            title:"确认删除此项记录吗",
+            content:"删除后不能找回，并且不再统计此项记录",
+            showCancel:true,
+            confirmText:"删除记录",
+            confirmColor: "#B40014",
+            cancelText: "取消",
+            cancelColor: "black",
+            success: function(res){
+                if(!res.cancel){
+                    var id = e.target.id;
+                    var condition = id.substring(9,10);
+                    var index = id.substring(11, id.length);
+                    util_dbOp.dbDelete(condition, index, mainPage);
+                }
+            }
+        });
     },
 
     todayShowDetail:function(e){
@@ -186,8 +204,11 @@ Page({
         var curIfShow = [];
         for(var i=0;i<this.data.displayEvents.length;i++)
             curIfShow.push(false);
-        this.setData({todayIfShow:curIfShow});
-        this.setData({ifShowRefineDDL:curIfShow});
+        this.setData({
+            todayIfShow:curIfShow,
+            ifShowRefineDDL:curIfShow,
+            userStat: app.globalData.userStat
+        });
     },
 
     onLoad: function (options) {

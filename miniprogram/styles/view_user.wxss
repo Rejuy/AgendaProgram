@@ -22,43 +22,103 @@
     color:white;
     font-size:120%;
 }
+.userSeperate{
+    height: 5%;
+    width: 100%;
+    box-sizing: border-box;
+    
+}
 .userDisplay{
-    height:80%;
+    height:75%;
     overflow: auto;
     width:100%;
-    display:flex;
+    display:flex; 
     flex-direction: column;
     align-items: center;
 }
-.userDisplayUnit{
+.userPart{
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    height:20%;
+    justify-content: center;
     width:100%;
+    height: 50%;
+    border-radius: 80rpx;
+    background-color: white;
+    
+    /* box-sizing:border-box; */
+    /* border-style:solid;
+    border-bottom-width: 2px;
+    border-color: #D2D2D2; */
 }
-.userDisplayTitle{
-    display:flex;
-    height:70%;
-    width:25%;
+.userPartTitle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25%;
+    width: 95%;
+    color:#4169E1;
+    font-weight: bold;
+    font-size:40rpx;
+
+    /* box-sizing:border-box;
+    border-style:solid;
+    border-width: 2px;
+    border-color: #D2D2D2; */
+}
+.userPartItem{
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    height: 20%;
     box-sizing: border-box;
+    /* border-style: ; */
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #D2D2D2;
+    
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: #D2D2D2; 
+    /* border-radius: 50rpx; */
+}
+.userItemTitle{
+    height: 95%;
+    width: 25%;
+    display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    font-size:95%;
-    background-color: white;
-    border-right-style: solid;
+    box-sizing:border-box;
+    border-right-style:solid;
     border-right-width: 1px;
-    border-right-color: #f6f6f6;
-    color:#4169E1;
+    border-right-color: #D2D2D2;
+    border-left-style:solid;
+    border-left-width: 1px;
+    border-left-color: #D2D2D2;
 }
-.userDisplayContent{
-    display:flex;
+.userItemContent{
+    height: 95%;
+    width: 75%;
+    display: flex;
     justify-content: center;
     align-items: center;
-    height:70%;
-    width:75%;
-    font-weight:bold;
-    font-size:90%;
-    background-color: white;
+    font-weight: normal;
+    
+    box-sizing:border-box;
+    border-right-style:solid;
+    border-right-width: 1px;
+    border-right-color: #D2D2D2;
+    border-left-style:solid;
+    border-left-width: 1px;
+    border-left-color: #D2D2D2;
+}
+.userContentEach{
+    height: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 95%;
+    /* font-weight: 400; */
+
 }

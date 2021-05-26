@@ -76,3 +76,8 @@ function judgeTimeLegal(data){
     return false;
 }
 module.exports.judgeTimeLegal = judgeTimeLegal;
+
+function getTimeRange(t1,t2){
+    var dayRange=getDateRange(t1,t2);
+    
+}
