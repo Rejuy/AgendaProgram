@@ -1,0 +1,100 @@
+<view class="addEvent">
+    <button class="addEventBtn" hover-class="btnPress"
+        bindtap="openPage_addEvent">
+        <text class="addEventText"  decode="{{true}}">添加</text>
+        <view class="addEventIcon icon_add"></view>
+    </button>
+</view>
+<view class="todayDisplay">
+    <view class="todayCell" wx:for="{{displayEvents}}" >
+
+        <button id="today_{{index}}" class="todayItem" hover-class="btnPress" bindtap="todayShowDetail" wx:if="{{item.mainType=='point'}}">
+            {{item.abbr==""? item.type: item.abbr}}（时间点）
+        </button>
+        <button id="today_{{index}}" class="todayItem" hover-class="btnPress" bindtap="todayShowDetail" wx:if="{{item.mainType=='period'}}">
+            {{item.abbr==""? item.type: item.abbr}}（时间段）
+        </button>
+        <button id="today_{{index}}" class="todayItem" hover-class="btnPress" bindtap="todayShowDetail" wx:if="{{item.mainType=='cycle'}}">
+            {{item.abbr==""? item.type: item.abbr}}（周期）
+        </button>
+
+        <view wx:if="{{todayIfShow[index]==true&&(displayEvents[index].mainType=='period'||displayEvents[index].cycleType=='loose')}}">
+            时间段/周期内剩余{{displayEvents[index].remainDays}}天
+        </view>
+        <view wx:if="{{todayIfShow[index]==true&&displayEvents[index].mainType=='point'}}">
+            截止时间：
+            {{displayEvents[index].year}}年{{displayEvents[index].month}}月{{displayEvents[index].date}}日
+            {{displayEvents[index].hour}}时{{displayEvents[index].minute}}分{{displayEvents[index].second}}秒
+        </view>
+        
+        <view class="todayDetail" wx:if="{{todayIfShow[index]==true&&item.content!=''}}">
+            {{item.content}}
+        </view>
+
+        <view class="todayOpBtns" wx:if="{{todayIfShow[index]==true}}">
+            <button id="finish_{{index}}" class="todayOpBtn" hover-class="btnPress" bindtap="doFinish">完成</button>
+            <button id="delay_{{index}}" class="todayOpBtn" bindtap="selDelay"wx:if="{{displayEvents[index].mainType=='point'}}">修改时间</button>
+            <button id="giveup_{{index}}"class="todayOpBtn" bindtap="doGiveUp" wx:if="{{displayEvents[index].mainType=='point'}}">放弃
+            </button>
+            <button id="stop_{{index}}"class="todayOpBtn" bindtap="doGiveUp" wx:if="{{displayEvents[index].mainType!='point'}}">终止
+            </button>
+        </view>
+        
+        <form bindsubmit="refineDDL" wx:if="{{ifShowRefineDDL[index]==true}}">
+            <view class="itemUnit" style="height:10%;justify-content:center">      
+                <!-- <view class="unitText">
+                    <view wx:if="{{mainType == 'point'}}">新截止时间</view>
+                </view> -->
+                <view class="unitBody" style="flex-direction:column;justify-content:space-around">
+                    <view style="display:flex;">
+                        <view style="display:flex;align-items:center">
+                            <input style="width:60%" name="year" value="{{displayEvents[index].year}}" type="number" maxlength="{{4}}"/>年
+                        </view>
+                        <view style="display:flex;align-items:center">
+                            <input style="width:60%" name="month" value="{{displayEvents[index].month}}" type="number" maxlength="2"/>月
+                        </view>
+                        <view style="display:flex;align-items:center">
+                            <input style="width:60%" name="date" value="{{displayEvents[index].date}}" type="number" maxlength="2"/>日
+                        </view>
+                    </view>
+                </view>
+            </view>
+
+            <view class="itemUnit" style="height:10%;justify-content:center">      
+                <!-- <view class="unitText"></view> -->
+                <view class="unitBody" style="flex-direction:column;justify-content:space-around">
+                    <view style="display:flex;">
+                        <view style="display:flex;align-items:center">
+                            <input style="width:60%" name="hour" value="{{23}}" type="number" maxlength="{{2}}"/>时
+                        </view>
+                        <view style="display:flex;align-items:center">
+                            <input style="width:60%" name="minute" value="{{59}}" type="number" maxlength="2"/>分
+                        </view>
+                        <view style="display:flex;align-items:center">
+                            <input style="width:60%" name="second" value="{{0}}" type="number" maxlength="2"/>秒
+                        </view>
+                    </view>
+                </view>
+            </view>
+            <view class="finishUnit">      
+                <button form-type="submit" id="refine_{{index}}" style="background-color:#557DF5;width:30%!important;color:white;" 
+                size="mini"
+                hover-class="hoverBtnPosi" 
+                bindtap="refineFinish" >
+                    提交修改
+                </button>
+                <button class="finishBtn" id="cancel_{{index}}" style="background-color:#E61E46;width:30%!important;color:white;" 
+                hover-class="hoverBtnNega" 
+                bindtap="refineFinish" 
+                size="mini">
+                   放弃修改
+                </button>
+            </view>
+        </form>
+        
+
+
+
+    </view>
+    
+</view>

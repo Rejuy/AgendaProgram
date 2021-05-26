@@ -1,0 +1,149 @@
+<view class="userInfo">
+    <view class="userInfoPortrait">
+       <open-data type="userAvatarUrl"></open-data>
+    </view>
+    <view class="userInfoText">
+        <open-data type="userNickName"></open-data>
+    </view>
+</view>
+
+<view class="userSeperate"></view>
+
+<view class="userDisplay">
+
+    <view class="userPart" style="height:400rpx">
+        <view class="userPartTitle" style="height:30%">
+            总计
+        </view>
+        <view class="userPartItem" style="height:30%">
+            <view class="userItemTitle">
+                总条数
+            </view>
+            <view class="userItemContent">
+                {{userStat.total.nums}}
+            </view>
+        </view>
+        <view class="userPartItem" style="height:30%">
+            <view class="userItemTitle">
+                类型占比
+            </view>
+            <view class="userItemContent">
+                <view class="userContentEach" style="width:33.3%">
+                    生活{{userStat.total.pct.life}}%
+                </view>
+                <view class="userContentEach" style="width:33.3%">
+                    学习{{userStat.total.pct.study}}%
+                </view>
+                <view class="userContentEach" style="width:33.3%">
+                    工作{{userStat.total.pct.work}}%
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <view class="userSeperate" style="height:50rpx;background-color:#f6f6f6;border-top-style:solid;border-top-color:#D2D2D2;border-top-width:1px;border-bottom-style:solid;border-bottom-color:#D2D2D2;border-bottom-width:1px">　</view>
+
+    <view class="userPart" style="height:400rpx">
+        <view class="userPartTitle" style="height:22%">
+            非周期事件
+        </view>
+        
+        <view class="userPartItem" style="height:22%">
+            <view class="userItemTitle" style="width:20%"></view>
+            <view class="userItemTitle" style="width:20%">进行中</view>
+            <view class="userItemTitle" style="width:20%">已完成</view>
+            <view class="userItemTitle" style="width:20%">未完成</view>
+            <view class="userItemTitle" style="width:20%">总计</view>
+        </view>
+        <view class="userPartItem" style="height:22%">
+            <view class="userItemTitle" style="width:25%">条数</view>
+            <view class="userItemContent" style="width:25%">
+                {{userStat.notCycle.cnt[0]}}
+            </view>
+            <view class="userItemContent" style="width:25%">
+                {{userStat.notCycle.cnt[1]}}
+            </view>
+            <view class="userItemContent" style="width:25%">
+                {{userStat.notCycle.cnt[2]}}
+            </view>
+            <view class="userItemContent" style="width:25%">
+                {{userStat.notCycle.nums}}
+            </view>
+        </view>
+        <view class="userPartItem" style="height:22%">
+            <view class="userItemTitle" style="width:25%">百分比</view>
+            <view class="userItemContent" style="width:25%">
+                {{userStat.notCycle.pct[0]}}%
+            </view>
+            <view class="userItemContent" style="width:25%">
+                {{userStat.notCycle.pct[1]}}%
+            </view>
+            <view class="userItemContent" style="width:25%">
+                {{userStat.notCycle.pct[2]}}%
+            </view>
+            <view class="userItemContent" style="width:25%">
+                {{userStat.notCycle.nums==0?"-":"100"}}%
+            </view>
+        </view>
+        
+    </view>
+
+    <view class="userSeperate" style="height:50rpx;background-color:#f6f6f6;border-top-style:solid;border-top-color:#D2D2D2;border-top-width:1px;border-bottom-style:solid;border-bottom-color:#D2D2D2;border-bottom-width:1px">　</view>
+
+    <view class="userPart" style="height:400rpx">
+        <view class="userPartTitle" style="height:22%">
+            周期事件
+        </view>
+        <view class="userPartItem" style="height:30%">
+            <view class="userItemTitle">
+                总条数
+            </view>
+            <view class="userItemContent">
+                {{userStat.cycle.nums}}
+            </view>
+        </view>
+        <view class="userPartItem" style="height:30%">
+            <view class="userItemTitle">
+                总完成率
+            </view>
+            <view class="userItemContent">
+                {{userStat.cycle.totalPct}}%
+            </view>
+        </view>
+    </view>
+    <view wx:for="{{userStat.cycle.arr}}" class="userPart" 
+    style="height:{{item.abbr==''?300:1000}}rpx">
+        <view class="userPartTitle" style="height:100rpx">
+            {{item.abbr==""?item.type:item.abbr}}
+        </view>
+        <view class="userPartItem" wx:if="{{item.content!=''}}" 
+        style="height:200rpx;width:90%;overflow:auto;b">
+            {{item.content}}
+        </view>
+        <view class="userPartItem" 
+        style="height:80rpx;border-top-style:none;">
+            <view class="userItemTitle" 
+            style="width:33%;border-style:none;">总天数</view>
+            <view class="userItemTitle" 
+            style="width:33%;border-style:none;">完成天数</view>
+            <view class="userItemTitle" 
+            style="width:33%;border-style:none;">完成率</view>
+        </view>
+        <view class="userPartItem" 
+        style="height:80rpx;border-style:none;">
+            <view class="userItemContent" 
+            style="width:33%;border-style:none;">
+                {{item.allTasks}}
+            </view>
+            <view class="userItemContent" 
+            style="width:33%;border-style:none;">
+                {{item.finiTasks}}
+            </view>
+            <view class="userItemContent" 
+            style="width:33%;border-style:none;">
+                {{userStat.cycle.eachPct[index]}}%
+            </view>
+        </view>
+    </view>
+
+</view>
